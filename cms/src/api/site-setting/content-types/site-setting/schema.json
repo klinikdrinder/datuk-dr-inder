@@ -59,6 +59,29 @@
     "intro_video_url": {
       "type": "string"
     },
+    "story_video": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "videos"
+      ]
+    },
+    "story_video_url": {
+      "type": "string"
+    },
+    "lcp_certificate": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "lcp_label": {
+      "type": "string",
+      "default": "Letter of Credentialing & Privileging, Ministry of Health Malaysia"
+    },
     "whatsapp_number": {
       "type": "string",
       "default": "60125174606"

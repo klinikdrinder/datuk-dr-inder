@@ -28,6 +28,7 @@ Add people under **Settings → Administration Panel → Users → Invite new us
 4. Keep claims factual. Avoid "best", "guaranteed", "painless" and before/after photos without written patient consent.
 
 ## Homepage text & photo galleries
+- **Site Settings → Founder video & LCP:** upload a short silent loop (**story_video**, MP4, 10–20 s, under ~10 MB) — it plays inside the arch in “The Founder”. Paste the full video with sound as a YouTube/Vimeo link in **story_video_url** (adds a “Watch” button). Upload the LCP certificate in **lcp_certificate** — always cover the IC number first.
 - **Site Settings:** hero text, hero photo, stats, the two floating cards, WhatsApp/phone/address, intro film link (YouTube or Vimeo link), SEO text, **notify_email** for alerts.
 - **Page Sections:** titles and text for each section, plus the photo galleries (**expertise_photos**, **leadership_photos**, **award_photos**).
   - Tip: put a word in `*asterisks*` in a title to show it in red italics, e.g. `Leading the industry, not *following* it`.

@@ -1,11 +1,13 @@
 import { cmsGet, media, list, defaults } from '../utils/cms'
 
+/** drop empty values so a blank admin field falls back to the default text */
+const filled = (o: any) => Object.fromEntries(Object.entries(o || {}).filter(([, v]) => v !== null && v !== undefined && v !== ''))
 const img = (url: string, alt: string) => ({ url, full: url, alt, caption: '', width: null, height: null, mime: 'image/webp' })
 
 export default defineCachedEventHandler(async () => {
   const nowIso = new Date().toISOString()
   const [site, home, logos, certs, awards, press, pubs, ig, upcoming, articles] = await Promise.all([
-    cmsGet('/site-setting', { populate: ['hero_photo', 'og_image'] }),
+    cmsGet('/site-setting', { populate: ['hero_photo', 'og_image', 'story_video', 'lcp_certificate'] }),
     cmsGet('/home-content', { populate: ['expertise_photos', 'leadership_photos', 'award_photos'] }),
     cmsGet('/recognition-logos', { populate: ['logo'], sort: ['order:asc', 'id:asc'], pagination: { pageSize: 60 } }),
     cmsGet('/certificates', { populate: ['image'], sort: ['order:asc', 'id:asc'], pagination: { pageSize: 60 } }),
@@ -17,8 +19,8 @@ export default defineCachedEventHandler(async () => {
     cmsGet('/articles', { populate: ['cover', 'category'], sort: ['publishedAt:desc'], pagination: { pageSize: 3 } }),
   ])
   const cmsOnline = !!(site || home)
-  const s = { ...defaults.site, ...(site?.data || {}) }
-  const h = { ...defaults.home, ...(home?.data || {}) }
+  const s = { ...defaults.site, ...filled(site?.data) }
+  const h = { ...defaults.home, ...filled(home?.data) }
 
   const logoList = list(logos).length
     ? list(logos).map((l: any) => ({ name: l.name, caption: l.caption, logo: media(l.logo, 'small') }))
@@ -33,6 +35,8 @@ export default defineCachedEventHandler(async () => {
       ...s,
       hero_photo: media(site?.data?.hero_photo, 'xlarge') || img('/images/datuk-dr-inder-hero.webp', 'Datuk Dr Inderjit Kaur in her white clinic coat, holding her glasses'),
       og_image: media(site?.data?.og_image, 'large'),
+      story_video: media(site?.data?.story_video),
+      lcp_certificate: media(site?.data?.lcp_certificate, 'large'),
       notify_email: undefined,
     },
     home: {
