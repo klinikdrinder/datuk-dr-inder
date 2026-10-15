@@ -12,7 +12,7 @@ Personal website of **Datuk Dr Inderjit Kaur (DPSM)** with a staff admin for sem
 - **Using the admin:** see [`ADMIN-GUIDE.md`](ADMIN-GUIDE.md).
 
 ## Run everything on your PC (Windows)
-Needs **Node.js 22 or 24 LTS** (`winget install OpenJS.NodeJS.LTS`, then close and reopen VS Code).
+Needs **Node.js 22** — the same version as the server. Download the **v22 Windows Installer (.msi)** from https://nodejs.org/en/download (choose version 22), then close and reopen VS Code and check `node -v` shows `v22.x`. Newer versions (Node 26) cannot install the local database module without extra build tools.
 
 **Window 1 — admin**
 ```powershell
