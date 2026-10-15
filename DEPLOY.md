@@ -15,10 +15,11 @@ Already done: Node.js 22 + Passenger, Jailed Shell, MySQL DB/user `datukdrkdi_cm
 3. GitHub → repo `klinikdrinder/datuk-dr-inder` → **Settings → Deploy keys → Add deploy key** → paste, title `cPanel datukdrkdi`, leave "Allow write access" **unticked**.
 
 ### 1b. Get the code
+(Uses the `dev` branch until the site is approved; after launch run `git -C ~/datukdrinder checkout main`.)
 cPanel → **Advanced → Terminal**, paste:
 ```bash
 mkdir -p ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
-GIT_SSH_COMMAND="ssh -i ~/.ssh/github" git clone -b main git@github.com:klinikdrinder/datuk-dr-inder.git ~/datukdrinder
+GIT_SSH_COMMAND="ssh -i ~/.ssh/github" git clone -b dev git@github.com:klinikdrinder/datuk-dr-inder.git ~/datukdrinder
 git -C ~/datukdrinder config core.sshCommand "ssh -i ~/.ssh/github"
 ```
 
