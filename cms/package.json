@@ -1,5 +1,5 @@
 {
-  "name": "cms",
+  "name": "datukdrinder-cms",
   "version": "0.1.0",
   "private": true,
   "description": "A Strapi application",
@@ -12,7 +12,8 @@
     "start": "strapi start",
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
-    "upgrade:dry": "npx @strapi/upgrade latest --dry"
+    "upgrade:dry": "npx @strapi/upgrade latest --dry",
+    "setup:local": "node scripts/setup-local.js"
   },
   "dependencies": {
     "@strapi/database": "5.58.0",

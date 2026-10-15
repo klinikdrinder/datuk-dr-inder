@@ -122,5 +122,16 @@ mkdir -p tmp && touch tmp/restart.txt   # tells Passenger to restart
 ```
 The website on Vercel redeploys by itself when `main` changes.
 
+## Copying content from your PC to the live admin (optional)
+If you added content on your PC first (README → "Run everything on your PC"):
+1. Live admin → **Settings → Transfer Tokens → Create new** (type *Push*, duration 7 days) → copy the token.
+2. On your PC, with the local admin stopped:
+```powershell
+cd cms
+npx strapi transfer --to https://cms.datukdrinder.com/admin --to-token PASTE-TOKEN
+```
+This **replaces** the live content with your PC content (including uploaded photos). Only do it before launch, or when you are sure.
+(Cloudflare Access must allow the transfer: temporarily remove the `admin` path rule, or run it before step 4.)
+
 ## Backups
 - MySQL DB `datukdrkdi_cms` and the folder `~/datukdrinder/cms/public/uploads` hold all content — both are included in cPanel/WHM account backups. Check that account `datukdrkdi` is ticked in **WHM → Backup Configuration**.
