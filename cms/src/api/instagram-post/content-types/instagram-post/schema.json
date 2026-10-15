@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "instagram_posts",
+  "info": {
+    "singularName": "instagram-post",
+    "pluralName": "instagram-posts",
+    "displayName": "Instagram Post",
+    "description": "Synced automatically from Instagram every hour. Tick \"Pinned\" to keep a post first, or \"Hidden\" to remove it from the website."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ig_id": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "caption": {
+      "type": "text"
+    },
+    "media_type": {
+      "type": "string"
+    },
+    "media_url": {
+      "type": "text"
+    },
+    "thumbnail_url": {
+      "type": "text"
+    },
+    "permalink": {
+      "type": "string"
+    },
+    "posted_at": {
+      "type": "datetime"
+    },
+    "pinned": {
+      "type": "boolean",
+      "default": false
+    },
+    "hidden": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

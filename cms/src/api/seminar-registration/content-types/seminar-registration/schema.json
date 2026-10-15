@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "seminar_registrations",
+  "info": {
+    "singularName": "seminar-registration",
+    "pluralName": "seminar-registrations",
+    "displayName": "Seminar Registration",
+    "description": "Registrations submitted from the website."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email"
+    },
+    "seats": {
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 10
+    },
+    "notes": {
+      "type": "text"
+    },
+    "seminar": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::seminar.seminar",
+      "inversedBy": "registrations"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "registered",
+        "confirmed",
+        "attended",
+        "cancelled"
+      ],
+      "default": "registered"
+    },
+    "consent": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

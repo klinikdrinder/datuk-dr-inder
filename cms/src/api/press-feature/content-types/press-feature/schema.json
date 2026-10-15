@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "press_features",
+  "info": {
+    "singularName": "press-feature",
+    "pluralName": "press-features",
+    "displayName": "Press Feature",
+    "description": "Magazine and newspaper clippings."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "publication": {
+      "type": "string",
+      "required": true
+    },
+    "headline": {
+      "type": "string"
+    },
+    "date": {
+      "type": "date"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "link": {
+      "type": "string"
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

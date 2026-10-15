@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recognition_logos",
+  "info": {
+    "singularName": "recognition-logo",
+    "pluralName": "recognition-logos",
+    "displayName": "Recognition Logo",
+    "description": "Logos in the strip under the hero."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "caption": {
+      "type": "string",
+      "required": true
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

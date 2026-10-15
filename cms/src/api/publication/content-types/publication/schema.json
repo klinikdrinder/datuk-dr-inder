@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "publications",
+  "info": {
+    "singularName": "publication",
+    "pluralName": "publications",
+    "displayName": "Publication",
+    "description": "Journal articles and papers by Datuk Dr Inder (PDF viewer on the site)."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "authors": {
+      "type": "string",
+      "default": "Inderjit Kaur"
+    },
+    "journal": {
+      "type": "string"
+    },
+    "citation": {
+      "type": "string"
+    },
+    "abstract": {
+      "type": "text"
+    },
+    "pdf": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "files"
+      ]
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "link": {
+      "type": "string"
+    },
+    "published_on": {
+      "type": "date"
+    }
+  }
+}

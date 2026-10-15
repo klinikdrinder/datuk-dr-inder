@@ -1,0 +1,98 @@
+{
+  "kind": "singleType",
+  "collectionName": "home_contents",
+  "info": {
+    "singularName": "home-content",
+    "pluralName": "home-contents",
+    "displayName": "Page Sections",
+    "description": "Headings, text and photo galleries for each homepage section. Photo captions and alt text are edited in the Media Library."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "story_title": {
+      "type": "string",
+      "default": "A pioneer who shaped hair restoration in *Malaysia*"
+    },
+    "story_body": {
+      "type": "blocks"
+    },
+    "philosophy_quote": {
+      "type": "text",
+      "default": "Hair restoration should never look artificial, and results should age naturally with the patient."
+    },
+    "credentials_title": {
+      "type": "string",
+      "default": "Internationally certified. Globally *trusted*."
+    },
+    "credentials_body": {
+      "type": "blocks"
+    },
+    "expertise_title": {
+      "type": "string",
+      "default": "Precision. Artistry. *Natural* results."
+    },
+    "expertise_body": {
+      "type": "blocks"
+    },
+    "expertise_photos": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "leadership_title": {
+      "type": "string",
+      "default": "Leading the industry, not *following* it"
+    },
+    "leadership_body": {
+      "type": "blocks"
+    },
+    "leadership_photos": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "awards_title": {
+      "type": "string",
+      "default": "Recognised excellence across Asia-Pacific"
+    },
+    "awards_body": {
+      "type": "blocks"
+    },
+    "award_photos": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "clinic_title": {
+      "type": "string",
+      "default": "Klinik Dr Inder, where expertise meets *care*"
+    },
+    "clinic_body": {
+      "type": "blocks"
+    },
+    "press_title": {
+      "type": "string",
+      "default": "In the *press*"
+    },
+    "instagram_title": {
+      "type": "string",
+      "default": "Follow her *work*"
+    },
+    "instagram_handle": {
+      "type": "string",
+      "default": "datukdrinder"
+    }
+  }
+}

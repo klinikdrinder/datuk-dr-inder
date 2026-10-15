@@ -1,0 +1,102 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-setting",
+    "pluralName": "site-settings",
+    "displayName": "Site Settings",
+    "description": "Hero text, contact details and SEO for the whole site."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "hero_eyebrow": {
+      "type": "string",
+      "default": "Founder & CEO"
+    },
+    "hero_intro": {
+      "type": "text",
+      "default": "A board-certified hair restoration physician who has spent more than three decades designing hairlines that look like they were always there."
+    },
+    "hero_photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "stat_years": {
+      "type": "string",
+      "default": "30+"
+    },
+    "stat_years_label": {
+      "type": "string",
+      "default": "Years in hair restoration"
+    },
+    "stat_awards_label": {
+      "type": "string",
+      "default": "Awards since 2020"
+    },
+    "chip1_title": {
+      "type": "string",
+      "default": "ABHRS Diplomate"
+    },
+    "chip1_text": {
+      "type": "string",
+      "default": "American Board of Hair Restoration Surgery"
+    },
+    "chip2_title": {
+      "type": "string",
+      "default": "President"
+    },
+    "chip2_text": {
+      "type": "string",
+      "default": "FUE Society Malaysia"
+    },
+    "intro_video_url": {
+      "type": "string"
+    },
+    "whatsapp_number": {
+      "type": "string",
+      "default": "60125174606"
+    },
+    "phone_display": {
+      "type": "string",
+      "default": "+60 12-517 4606"
+    },
+    "address_line1": {
+      "type": "string",
+      "default": "102 Jalan Gasing"
+    },
+    "address_line2": {
+      "type": "string",
+      "default": "46000 Petaling Jaya, Selangor"
+    },
+    "map_url": {
+      "type": "string",
+      "default": "https://g.page/hairtransplantcentremalaysia?share"
+    },
+    "notify_email": {
+      "type": "email",
+      "private": true
+    },
+    "seo_title": {
+      "type": "string",
+      "default": "Datuk Dr Inder | Hair Restoration Physician, Malaysia"
+    },
+    "seo_description": {
+      "type": "text"
+    },
+    "og_image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  }
+}

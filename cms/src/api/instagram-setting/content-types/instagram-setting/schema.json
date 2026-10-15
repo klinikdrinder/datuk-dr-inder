@@ -1,0 +1,39 @@
+{
+  "kind": "singleType",
+  "collectionName": "instagram_settings",
+  "info": {
+    "singularName": "instagram-setting",
+    "pluralName": "instagram-settings",
+    "displayName": "Instagram Connection",
+    "description": "Paste the Instagram access token once. The site then pulls new posts every hour and renews the token automatically."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "access_token": {
+      "type": "text",
+      "private": true
+    },
+    "token_expires_at": {
+      "type": "datetime",
+      "private": true
+    },
+    "account_username": {
+      "type": "string"
+    },
+    "posts_to_show": {
+      "type": "integer",
+      "default": 8,
+      "min": 3,
+      "max": 12
+    },
+    "last_synced_at": {
+      "type": "datetime"
+    },
+    "last_status": {
+      "type": "text"
+    }
+  }
+}
