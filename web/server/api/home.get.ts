@@ -6,17 +6,18 @@ const img = (url: string, alt: string) => ({ url, full: url, alt, caption: '', w
 
 export default defineCachedEventHandler(async () => {
   const nowIso = new Date().toISOString()
-  const [site, home, logos, certs, awards, press, pubs, ig, upcoming, articles] = await Promise.all([
+  const [site, home, logos, certs, awards, press, pubs, ig, upcoming, articles, events] = await Promise.all([
     cmsGet('/site-setting', { populate: ['hero_photo', 'og_image', 'story_video', 'lcp_certificate'] }),
     cmsGet('/home-content', { populate: ['expertise_photos', 'leadership_photos', 'award_photos'] }),
     cmsGet('/recognition-logos', { populate: ['logo'], sort: ['order:asc', 'id:asc'], pagination: { pageSize: 60 } }),
     cmsGet('/certificates', { populate: ['image'], sort: ['order:asc', 'id:asc'], pagination: { pageSize: 60 } }),
     cmsGet('/awards', { populate: ['certificate_image'], sort: ['order:asc', 'year:asc'], pagination: { pageSize: 100 } }),
-    cmsGet('/press-features', { populate: ['image'], sort: ['order:asc', 'date:desc'], pagination: { pageSize: 60 } }),
+    cmsGet('/press-features', { populate: ['image', 'pages'], sort: ['order:asc', 'date:desc'], pagination: { pageSize: 60 } }),
     cmsGet('/publications', { populate: ['pdf', 'cover'], sort: ['published_on:desc'], pagination: { pageSize: 10 } }),
     cmsGet('/website/instagram'),
     cmsGet('/seminars', { populate: ['poster'], filters: { starts_at: { $gte: nowIso } }, sort: ['starts_at:asc'], pagination: { pageSize: 4 } }),
     cmsGet('/articles', { populate: ['cover', 'category'], sort: ['publishedAt:desc'], pagination: { pageSize: 3 } }),
+    cmsGet('/events', { populate: { photos: true, seminar: { fields: ['slug', 'title'] } }, sort: ['date:desc', 'id:desc'], pagination: { pageSize: 3 } }),
   ])
   const cmsOnline = !!(site || home)
   const s = { ...defaults.site, ...filled(site?.data) }
@@ -33,7 +34,7 @@ export default defineCachedEventHandler(async () => {
     cmsOnline,
     site: {
       ...s,
-      hero_photo: media(site?.data?.hero_photo, 'xlarge') || img('/images/datuk-dr-inder-hero.webp', 'Datuk Dr Inderjit Kaur in her white clinic coat, holding her glasses'),
+      hero_photo: media(site?.data?.hero_photo, 'xlarge') || img('/images/datuk-dr-inder-hero.webp', 'Datuk Dr Inderjit Kaur in her surgical gown'),
       og_image: media(site?.data?.og_image, 'large'),
       story_video: media(site?.data?.story_video),
       lcp_certificate: media(site?.data?.lcp_certificate, 'large'),
@@ -48,7 +49,12 @@ export default defineCachedEventHandler(async () => {
     logos: logoList,
     certificates: list(certs).map((c: any) => ({ title: c.title, issuer: c.issuer, year: c.year, image: media(c.image, 'large') })).filter((c: any) => c.image),
     awards: awardList,
-    press: list(press).map((p: any) => ({ publication: p.publication, headline: p.headline, date: p.date, link: p.link, image: media(p.image, 'medium') })).filter((p: any) => p.image),
+    // image = the clipping/cover shown on the wall; pages = extra pages opened with it in the viewer
+    press: list(press).map((p: any) => {
+      const image = media(p.image, 'medium') || media(p.pages?.[0], 'medium')
+      const all = [p.image, ...(p.pages || [])].filter(Boolean)
+      return { publication: p.publication, headline: p.headline, date: p.date, link: p.link, image, pages: all.map((m: any) => media(m)) }
+    }).filter((p: any) => p.image),
     publications: (list(pubs).length ? list(pubs) : defaults.publications).map((p: any) => ({
       title: p.title, authors: p.authors, journal: p.journal, citation: p.citation, abstract: p.abstract, link: p.link,
       published_on: p.published_on, pdf: media(p.pdf), cover: media(p.cover, 'medium'),
@@ -56,5 +62,6 @@ export default defineCachedEventHandler(async () => {
     instagram: { username: ig?.username || h.instagram_handle, posts: ig?.posts || [] },
     seminars: list(upcoming).map(mapSeminar),
     articles: list(articles).map(mapArticle),
+    events: list(events).map(mapEventCard),
   }
 }, { maxAge: 60, swr: true, name: 'home' })

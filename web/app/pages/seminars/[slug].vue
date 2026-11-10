@@ -48,6 +48,10 @@ async function submit() {
         <div>
           <div v-if="s.poster" class="article-cover" style="aspect-ratio:auto"><img :src="s.poster.url" :alt="s.poster.alt || s.title"></div>
           <RichBlocks :blocks="s.description" />
+          <template v-if="s.photos?.length">
+            <h2 class="eyebrow" style="margin:44px 0 18px">Photos from this seminar</h2>
+            <GalleryGrid :items="s.photos" :cols="3" shape="land" />
+          </template>
         </div>
         <aside id="register" class="side-card">
           <template v-if="past"><h4>This seminar has ended</h4><p>See upcoming seminars, or WhatsApp us to hear about the next one.</p><NuxtLink class="btn btn-red" to="/seminars">Upcoming seminars</NuxtLink></template>

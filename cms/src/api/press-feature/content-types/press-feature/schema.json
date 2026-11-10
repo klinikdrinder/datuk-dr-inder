@@ -22,6 +22,14 @@
     "date": {
       "type": "date"
     },
+    "pages": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
     "image": {
       "type": "media",
       "multiple": false,

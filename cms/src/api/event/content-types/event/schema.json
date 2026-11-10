@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "events",
+  "info": {
+    "singularName": "event",
+    "pluralName": "events",
+    "displayName": "Event",
+    "description": "Seminars, congresses, awards and media events Datuk Dr Inder took part in, with photos. Published events show on the website's Events section; the first photo is the cover."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "end_date": {
+      "type": "date"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string",
+      "default": "Malaysia"
+    },
+    "role": {
+      "type": "enumeration",
+      "enum": ["Speaker", "Faculty", "Organiser", "Award", "Guest", "Media", "Attendee"],
+      "default": "Speaker",
+      "required": true
+    },
+    "highlight": {
+      "type": "string",
+      "maxLength": 30
+    },
+    "summary": {
+      "type": "text",
+      "maxLength": 300
+    },
+    "photos": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": ["images"]
+    },
+    "seminar": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::seminar.seminar"
+    }
+  }
+}

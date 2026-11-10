@@ -84,7 +84,7 @@
     },
     "press_title": {
       "type": "string",
-      "default": "In the *press*"
+      "default": "As featured in *the press*"
     },
     "instagram_title": {
       "type": "string",

@@ -48,6 +48,7 @@ onBeforeUnmount(() => { window.removeEventListener('scroll', onScroll); cancelAn
           <li><a :href="h('expertise')">Expertise</a></li>
           <li><a :href="h('awards')">Awards</a></li>
           <li><NuxtLink to="/seminars">Seminars</NuxtLink></li>
+          <li><NuxtLink to="/events">Events</NuxtLink></li>
           <li><NuxtLink to="/journal">Journal</NuxtLink></li>
         </ul>
         <div class="nav-r">

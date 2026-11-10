@@ -21,6 +21,18 @@ Add people under **Settings → Administration Panel → Users → Invite new us
 - **Registrations:** Content Manager → **Seminar Registration** (filter by seminar). Change **status** to confirmed / attended / cancelled.
 - **Excel download:** `https://cms.datukdrinder.com/api/exports/registrations?key=EXPORT_KEY&seminar=SEMINAR-SLUG` (ask the Super Admin for the key; leave out `&seminar=…` for all).
 
+## Events & photos (seminars, congresses, awards, media)
+Use this after every seminar, international congress, award night or TV/press appearance.
+1. **Event → Create new entry.**
+2. Fill in **title**, **date** (and **end_date** for multi-day events), **city**, **country** (leave "Malaysia" for local events — any other country is labelled *International* automatically).
+3. **role:** Speaker, Faculty, Organiser, Award, Guest, Media or Attendee. **highlight** is an optional short extra tag, e.g. `Live surgery`.
+4. **photos:** drag in the photos. **The first photo is the cover** — drag to reorder. Add captions in the Media Library if you like (otherwise the event title is used).
+5. Optional: **summary** (shown on the big card) and **seminar** — link one of Datuk's own seminars and its photos also appear on that seminar's page.
+6. **Publish.**
+- The newest 3 show on the homepage under **Latest events attended**, each as a photo collage: the first 5 photos when the event has 5 or more, the first 3 when it has 3–4, otherwise just the cover. Put the best photos first.
+- Every event is on **/events**, grouped by year. The counters (events, countries, this year) and the year filters update themselves.
+- Photos: landscape JPGs around 2000 px wide are ideal; the website makes smaller copies automatically.
+
 ## Journal (blog)
 1. **Journal Article → Create new entry.** Title, category, excerpt (1–2 sentences), cover photo, body.
 2. Writers press **Save** (draft). Editors press **Publish**, or set **publish_at** to schedule.
@@ -38,7 +50,11 @@ Add people under **Settings → Administration Panel → Users → Invite new us
 - **Certificate:** upload the scan, title, issuer, year, order (small numbers first).
 - **Award:** year, title, presented by. Tick **show_on_ring** to show it on the 3D ring. Add **certificate_image** to also show it in "Award certificates". The award counts on the site update automatically.
 - **Recognition Logo:** the strip under the hero (logo + short caption).
-- **Press Feature:** magazine/newspaper clippings.
+- **Press Feature** (homepage section **Datuk Dr Inder in magazines**): one entry per magazine or newspaper feature.
+  - **publication** (e.g. *The Star*), **headline**, **date** (the year is shown), optional **link** to the online article.
+  - **image:** the clipping or cover shown on the magazine wall. **pages:** optional extra pages — visitors flip through image + pages in order.
+  - **order:** smaller numbers show first; otherwise newest first. The first 12 show, with a "Show all" button for the rest.
+  - The section heading is **press_title** in **Page Sections** (`*asterisks*` = red italics).
 - **Publication:** journal papers — upload the PDF and visitors can read or download it.
 
 ## Enquiries

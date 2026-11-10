@@ -7,7 +7,7 @@ export default defineCachedEventHandler(async (event) => {
     cmsGet('/seminars', { fields: ['slug', 'updatedAt'], pagination: { pageSize: 500 } }),
   ])
   const urls = [
-    { loc: `${base}/`, pri: '1.0' }, { loc: `${base}/journal`, pri: '0.8' }, { loc: `${base}/seminars`, pri: '0.8' },
+    { loc: `${base}/`, pri: '1.0' }, { loc: `${base}/journal`, pri: '0.8' }, { loc: `${base}/seminars`, pri: '0.8' }, { loc: `${base}/events`, pri: '0.7' },
     ...list(arts).map((a: any) => ({ loc: `${base}/journal/${a.slug}`, mod: a.updatedAt, pri: '0.7' })),
     ...list(sems).map((s: any) => ({ loc: `${base}/seminars/${s.slug}`, mod: s.updatedAt, pri: '0.6' })),
   ]

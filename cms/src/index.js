@@ -18,6 +18,7 @@ const PUBLIC_READ = [
   'api::category.category',
   'api::article.article',
   'api::seminar.seminar',
+  'api::event.event',
 ];
 
 async function setPublicPermissions(strapi) {

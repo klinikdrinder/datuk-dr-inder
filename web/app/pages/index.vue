@@ -45,6 +45,7 @@ useHead({
     <PressSection :home="d.home" :press="d.press" />
     <InstagramSection :home="d.home" :instagram="d.instagram" />
     <SeminarsSection :seminars="d.seminars" :site="d.site" />
+    <EventsSection :events="d.events" :home="d.home" />
     <JournalSection :articles="d.articles" />
     <ConsultSection :site="d.site" />
   </div>

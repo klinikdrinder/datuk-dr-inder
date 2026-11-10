@@ -7,8 +7,8 @@
   "stat_awards_label": "Awards since 2020",
   "chip1_title": "ABHRS Diplomate",
   "chip1_text": "American Board of Hair Restoration Surgery",
-  "chip2_title": "President",
-  "chip2_text": "FUE Society Malaysia",
+  "hero_specialties_label": "Expert on",
+  "hero_specialties": "iGraft Long-Hair FUE\nHairline Design\nDonor Assessment & Long-Term Planning\nCorrective Hair Transplantation",
   "intro_video_url": "",
   "whatsapp_number": "60125174606",
   "phone_display": "+60 12-517 4606",
@@ -241,7 +241,7 @@
     ]
    }
   ],
-  "press_title": "In the *press*",
+  "press_title": "As featured in *the press*",
   "instagram_title": "Follow her *work*",
   "instagram_handle": "datukdrinder"
  },

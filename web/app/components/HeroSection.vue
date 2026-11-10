@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{ site: any; logos: any[]; awardsCount: number }>()
+// One specialty per line in the admin's "hero_specialties" field.
+const specialties = computed<string[]>(() => String(props.site.hero_specialties || '').split(/\r?\n/).map(s => s.trim()).filter(Boolean))
 const { openFilm } = useFilm()
 const canvas = ref<HTMLCanvasElement | null>(null)
 const mega = ref<HTMLElement | null>(null)
@@ -102,10 +104,6 @@ onBeforeUnmount(() => stop())
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z" /><path d="M8.5 12l2.3 2.3 4.7-4.6" /></svg></span>
           <div><b>{{ site.chip1_title }}</b><span>{{ site.chip1_text }}</span></div>
         </div>
-        <div class="chip c2">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 4h10v4a5 5 0 0 1-10 0V4z" /><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 13v4M8 21h8M9 17h6" /></svg></span>
-          <div><b>{{ site.chip2_title }}</b><span>{{ site.chip2_text }}</span></div>
-        </div>
       </div>
       <div class="h-left">
         <div class="eyebrow">{{ site.hero_eyebrow }}</div>
@@ -123,6 +121,17 @@ onBeforeUnmount(() => stop())
         </div>
       </div>
       <div class="h-right">
+        <div v-if="specialties.length" class="spec-card">
+          <div id="spec-title" class="spec-head">
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8-4.3-4.1 5.9-.9z" /></svg></span>
+            <span>{{ site.hero_specialties_label || 'Expert on' }}</span>
+          </div>
+          <ol class="h-spec" aria-labelledby="spec-title">
+            <li v-for="(t, i) in specialties" :key="t" :style="{ '--d': `${1 + i * 0.12}s` }">
+              <span class="n">{{ String(i + 1).padStart(2, '0') }}</span><span class="t">{{ t }}</span>
+            </li>
+          </ol>
+        </div>
         <div class="h-stats">
           <div><div class="v">{{ site.stat_years?.replace('+', '') }}<em v-if="site.stat_years?.includes('+')">+</em></div><div class="k">{{ site.stat_years_label }}</div></div>
           <div><div class="v">{{ awardsCount }}</div><div class="k">{{ site.stat_awards_label }}</div></div>

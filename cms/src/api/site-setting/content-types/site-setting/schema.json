@@ -48,13 +48,13 @@
       "type": "string",
       "default": "American Board of Hair Restoration Surgery"
     },
-    "chip2_title": {
+    "hero_specialties_label": {
       "type": "string",
-      "default": "President"
+      "default": "Expert on"
     },
-    "chip2_text": {
-      "type": "string",
-      "default": "FUE Society Malaysia"
+    "hero_specialties": {
+      "type": "text",
+      "default": "iGraft Long-Hair FUE\nHairline Design\nDonor Assessment & Long-Term Planning\nCorrective Hair Transplantation"
     },
     "intro_video_url": {
       "type": "string"
