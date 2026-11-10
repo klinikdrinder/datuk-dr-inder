@@ -16,6 +16,16 @@ import { endpoints } from './endpoints'
 import { HomeContent, InstagramSettings, SiteSettings } from './globals/Globals'
 import { SUPABASE_CA } from './lib/supabase-ca'
 import { migrations } from './migrations'
+import { revalidateAfterChange, revalidateAfterDelete, revalidateGlobal } from './lib/revalidate'
+import type { CollectionConfig, GlobalConfig } from 'payload'
+
+// Saving these refreshes the website's cached pages straight away.
+const ON_SITE = new Set(['events', 'seminars', 'articles', 'categories', 'awards', 'certificates', 'recognition-logos', 'press-features', 'publications'])
+const withRevalidate = (c: CollectionConfig): CollectionConfig =>
+  ON_SITE.has(c.slug)
+    ? { ...c, hooks: { ...c.hooks, afterChange: [...(c.hooks?.afterChange || []), revalidateAfterChange], afterDelete: [...(c.hooks?.afterDelete || []), revalidateAfterDelete] } }
+    : c
+const withRevalidateGlobal = (g: GlobalConfig): GlobalConfig => ({ ...g, hooks: { ...g.hooks, afterChange: [...(g.hooks?.afterChange || []), revalidateGlobal] } })
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 const serverURL =
@@ -38,8 +48,8 @@ export default buildConfig({
     Articles, Categories,
     Awards, Certificates, RecognitionLogos, PressFeatures, Publications,
     InstagramPosts, Media, Users,
-  ],
-  globals: [SiteSettings, HomeContent, InstagramSettings],
+  ].map(withRevalidate),
+  globals: [withRevalidateGlobal(SiteSettings), withRevalidateGlobal(HomeContent), InstagramSettings],
   endpoints,
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

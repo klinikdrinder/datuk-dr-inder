@@ -4,7 +4,7 @@ import { cmsGet, media, list, defaults } from '../utils/cms'
 const filled = (o: any) => Object.fromEntries(Object.entries(o || {}).filter(([, v]) => v !== null && v !== undefined && v !== ''))
 const img = (url: string, alt: string) => ({ url, full: url, alt, caption: '', width: null, height: null, mime: 'image/webp' })
 
-export default defineCachedEventHandler(async () => {
+export default defineEventHandler(async () => {
   const nowIso = new Date().toISOString()
   const [site, home, logos, certs, awards, press, pubs, ig, upcoming, articles, events] = await Promise.all([
     cmsGet('/site-setting', { populate: ['hero_photo', 'og_image', 'story_video', 'lcp_certificate'] }),
@@ -64,4 +64,4 @@ export default defineCachedEventHandler(async () => {
     articles: list(articles).map(mapArticle),
     events: list(events).map(mapEventCard),
   }
-}, { maxAge: 60, swr: true, name: 'home' })
+})

@@ -1,6 +1,6 @@
 import { cmsGet, list } from '../../utils/cms'
 
-export default defineCachedEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   const q = getQuery(event)
   const page = Math.max(1, parseInt(String(q.page || '1'), 10) || 1)
   const cat = String(q.category || '')
@@ -15,4 +15,4 @@ export default defineCachedEventHandler(async (event) => {
     pagination: r?.meta?.pagination || { page: 1, pageCount: 1 },
     categories: list(cats).map((c: any) => ({ name: c.name, slug: c.slug })),
   }
-}, { maxAge: 60, swr: true, name: 'articles', getKey: (e) => { const q = getQuery(e); return `${q.page || 1}-${q.category || ''}` } })
+})

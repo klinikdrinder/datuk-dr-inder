@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     // server-only (set in Vercel → Settings → Environment Variables)
     cmsUrl: process.env.NUXT_CMS_URL || 'http://localhost:1337', // NUXT_CMS_URL
     formSecret: '', // NUXT_FORM_SECRET (same value as FORM_SECRET in the CMS)
+    revalidateSecret: '', // NUXT_REVALIDATE_SECRET (same value as REVALIDATE_SECRET in the admin)
     public: {
       siteUrl: 'https://datukdrinder.com', // NUXT_PUBLIC_SITE_URL
       mediaUrl: '', // NUXT_PUBLIC_MEDIA_URL e.g. https://cms.datukdrinder.com
@@ -29,15 +30,21 @@ export default defineNuxtConfig({
     },
   },
 
-  // Pages are rebuilt in the background at most every few minutes, so CMS edits appear quickly
+  // Pages are cached on Vercel's CDN. The admin refreshes them the moment something is saved
+  // (server/api/revalidate.post.ts); the timers below are only a safety net.
   routeRules: {
-    '/': { isr: 120 },
-    '/seminars/**': { isr: 120 },
-    '/journal/**': { isr: 300 },
+    '/': { isr: 600 },
+    '/events': { isr: 600 },
+    '/seminars': { isr: 600 },
+    '/seminars/**': { isr: 600 },
+    '/journal': { isr: { expiration: 600, allowQuery: ['page', 'category'] } },
+    '/journal/**': { isr: 600 },
     '/privacy': { isr: 86400 },
   },
 
   nitro: {
     preset: process.env.VERCEL ? 'vercel' : undefined,
+    // lets /api/revalidate rebuild cached pages on demand
+    vercel: { config: { bypassToken: process.env.VERCEL_BYPASS_TOKEN } },
   },
 })

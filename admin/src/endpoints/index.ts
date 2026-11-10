@@ -10,6 +10,7 @@ import crypto from 'crypto'
 import type { Endpoint, Payload, PayloadRequest } from 'payload'
 import { addDataAndFileToRequest } from 'payload'
 import { refreshInstagramToken, syncInstagram } from '../lib/instagram'
+import { revalidateWebsite } from '../lib/revalidate'
 
 const json = (body: any, status = 200, headers: Record<string, string> = {}) =>
   Response.json(body, { status, headers })
@@ -69,6 +70,7 @@ async function scheduledPublish(payload: Payload) {
     for (const doc of due.docs as any[]) {
       const { id, createdAt, updatedAt, _status, ...rest } = doc
       await payload.update({ collection, id, draft: false, overrideAccess: true, data: { ...rest, _status: 'published', publish_at: null } })
+      // (the collection hook refreshes the website pages)
       done.push(`${collection}:${id}`)
     }
   }
@@ -187,12 +189,48 @@ export const endpoints: Endpoint[] = [
   {
     path: '/cron/instagram',
     method: 'get',
-    handler: async (req) => (cronOk(req) ? json(await syncInstagram(req.payload)) : fail(401, 'Not allowed')),
+    handler: async (req) => {
+      if (!cronOk(req)) return fail(401, 'Not allowed')
+      const r: any = await syncInstagram(req.payload)
+      if (r?.ok) await revalidateWebsite([], req.payload)
+      return json(r)
+    },
   },
   {
     path: '/cron/instagram-token',
     method: 'get',
     handler: async (req) => (cronOk(req) ? json(await refreshInstagramToken(req.payload)) : fail(401, 'Not allowed')),
+  },
+  {
+    // Maintenance: rebuild the resized copies of existing photos (e.g. after changing sizes/format).
+    // GET /api/maintenance/resize?page=1  (Authorization: Bearer CRON_SECRET), 5 photos per call.
+    path: '/maintenance/resize',
+    method: 'get',
+    handler: async (req) => {
+      if (!cronOk(req)) return fail(401, 'Not allowed')
+      const page = Math.max(1, parseInt(q(req, 'page') || '1', 10) || 1)
+      const r = await req.payload.find({
+        collection: 'media', page, limit: 5, sort: 'id', depth: 0, overrideAccess: true,
+        where: { mimeType: { in: ['image/jpeg', 'image/png', 'image/webp'] } },
+      })
+      const done: any[] = []
+      for (const m of r.docs as any[]) {
+        try {
+          const src = /^https?:/.test(m.url) ? m.url : `${new URL(req.url || 'http://x').origin}${m.url}`
+          const res = await fetch(src, { signal: AbortSignal.timeout(30000) })
+          if (!res.ok) throw new Error(`download ${res.status}`)
+          const data = Buffer.from(await res.arrayBuffer())
+          await req.payload.update({
+            collection: 'media', id: m.id, overrideAccess: true, overwriteExistingFiles: true, context: { skipRevalidate: true },
+            data: {}, file: { data, mimetype: m.mimeType, name: m.filename, size: data.length },
+          })
+          done.push(m.id)
+        } catch (e: any) {
+          done.push({ id: m.id, error: e.message })
+        }
+      }
+      return json({ page, totalPages: r.totalPages, done })
+    },
   },
   {
     // One-time copy of content from the old admin. Disabled unless SETUP_SECRET is set (remove it afterwards).
