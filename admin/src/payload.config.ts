@@ -18,7 +18,9 @@ import { SUPABASE_CA } from './lib/supabase-ca'
 import { migrations } from './migrations'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
-const serverURL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3001'
+const serverURL =
+  process.env.NEXT_PUBLIC_SERVER_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3001')
 const websiteURL = process.env.WEBSITE_URL || 'http://localhost:3000'
 
 export default buildConfig({
