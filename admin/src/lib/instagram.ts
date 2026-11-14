@@ -6,6 +6,7 @@
  * Docs: https://developers.facebook.com/docs/instagram-platform
  */
 import type { Payload } from 'payload'
+import { revalidateWebsite } from './revalidate'
 
 const IG = 'https://graph.instagram.com'
 const FB = `https://graph.facebook.com/${process.env.FB_API_VERSION || 'v23.0'}`
@@ -92,6 +93,7 @@ export async function syncInstagram(payload: Payload) {
       last_synced_at: new Date().toISOString(), last_status: `OK: ${count} posts synced`,
       account_username: username || null, ...(igId ? { instagram_user_id: igId } : {}),
     })
+    await revalidateWebsite([], payload) // show the new posts on the homepage straight away
     return { ok: true, count }
   } catch (e: any) {
     payload.logger.error(`[instagram] sync failed: ${e.message}`)

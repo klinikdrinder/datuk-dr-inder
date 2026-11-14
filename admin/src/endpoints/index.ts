@@ -191,9 +191,7 @@ export const endpoints: Endpoint[] = [
     method: 'get',
     handler: async (req) => {
       if (!cronOk(req)) return fail(401, 'Not allowed')
-      const r: any = await syncInstagram(req.payload)
-      if (r?.ok) await revalidateWebsite([], req.payload)
-      return json(r)
+      return json(await syncInstagram(req.payload)) // the sync refreshes the website itself
     },
   },
   {
