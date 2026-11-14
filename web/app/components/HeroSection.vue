@@ -2,6 +2,9 @@
 const props = defineProps<{ site: any; logos: any[]; awardsCount: number }>()
 // One specialty per line in the admin's "hero_specialties" field.
 const specialties = computed<string[]>(() => String(props.site.hero_specialties || '').split(/\r?\n/).map(s => s.trim()).filter(Boolean))
+// "Signature approach" banner over the photo (editable in the admin: Site settings → Hero)
+const signatureLabel = computed(() => props.site.signature_label || 'Signature approach')
+const signatureText = computed(() => props.site.signature_text || '')
 const { openFilm } = useFilm()
 const canvas = ref<HTMLCanvasElement | null>(null)
 const mega = ref<HTMLElement | null>(null)
@@ -136,6 +139,10 @@ onBeforeUnmount(() => stop())
           <div><div class="v">{{ site.stat_years?.replace('+', '') }}<em v-if="site.stat_years?.includes('+')">+</em></div><div class="k">{{ site.stat_years_label }}</div></div>
           <div><div class="v">{{ awardsCount }}</div><div class="k">{{ site.stat_awards_label }}</div></div>
         </div>
+      </div>
+      <div v-if="signatureText" class="hx-sign">
+        <span class="hx-sign-ic" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 22c-3-3-9-3-9 2 0 4 9 9 9 9s9-5 9-9c0-5-6-5-9-2z" /><path d="M4 33l6-3c2-1 4-1 6 0l7 3h6c2 0 2 3 0 3h-8" /><path d="M10 41l5-2h10l13-7c2-1 4 1 2 3l-12 9H14" /></svg></span>
+        <div><b>{{ signatureLabel }}</b><span>{{ signatureText }}</span></div>
       </div>
     </div>
     <div v-if="logos.length" class="recog">

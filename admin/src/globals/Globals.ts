@@ -41,6 +41,13 @@ export const SiteSettings: GlobalConfig = {
               label: 'Specialties (one per line)',
               defaultValue: 'iGraft Long-Hair FUE\nHairline Design\nDonor Assessment & Long-Term Planning\nCorrective Hair Transplantation',
             },
+            {
+              type: 'row',
+              fields: [
+                { name: 'signature_label', type: 'text', defaultValue: 'Signature approach', label: 'Banner label', admin: { description: 'Small gold text on the banner over the photo.' } },
+                { name: 'signature_text', type: 'text', defaultValue: 'Patient comfort & personalised pain management', label: 'Banner text', admin: { description: 'Leave empty to hide the banner.' } },
+              ],
+            },
             { name: 'intro_video_url', type: 'text', admin: { description: 'Intro film link (YouTube or Vimeo).' } },
           ],
         },
