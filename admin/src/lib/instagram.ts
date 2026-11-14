@@ -54,13 +54,17 @@ export async function syncInstagram(payload: Payload) {
   try {
     let items: any[] = []
     let username = s.account_username
+    let picture: string | null = null
     let igId = String(s.instagram_user_id || '').trim()
 
     if (isInstagramLoginToken(token)) {
       items = (await get(IG, `${IG_VERSION}/me/media`, { fields: FIELDS, limit: '40', access_token: token })).data || []
-      if (!username) {
-        try { username = (await get(IG, `${IG_VERSION}/me`, { fields: 'username', access_token: token })).username } catch {}
-      }
+      // profile: refreshed every sync because Instagram's picture links expire after a few days
+      try {
+        const me = await get(IG, `${IG_VERSION}/me`, { fields: 'username,profile_picture_url', access_token: token })
+        username = me.username || username
+        picture = me.profile_picture_url || null
+      } catch {}
     } else {
       if (!igId) {
         const found = await findInstagramId(token)
@@ -69,9 +73,11 @@ export async function syncInstagram(payload: Payload) {
         username = username || found.username
       }
       items = (await get(FB, `/${igId}/media`, { fields: FIELDS, limit: '40', access_token: token })).data || []
-      if (!username) {
-        try { username = (await get(FB, `/${igId}`, { fields: 'username', access_token: token })).username } catch {}
-      }
+      try {
+        const me = await get(FB, `/${igId}`, { fields: 'username,profile_picture_url', access_token: token })
+        username = me.username || username
+        picture = me.profile_picture_url || null
+      } catch {}
     }
 
     let count = 0
@@ -92,6 +98,7 @@ export async function syncInstagram(payload: Payload) {
     await saveStatus(payload, {
       last_synced_at: new Date().toISOString(), last_status: `OK: ${count} posts synced`,
       account_username: username || null, ...(igId ? { instagram_user_id: igId } : {}),
+      ...(picture ? { profile_picture_url: picture } : {}),
     })
     await revalidateWebsite([], payload) // show the new posts on the homepage straight away
     return { ok: true, count }

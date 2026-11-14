@@ -154,6 +154,7 @@ export const InstagramSettings: GlobalConfig = {
           if ((data.instagram_user_id || '') === (originalDoc?.instagram_user_id || '')) {
             data.instagram_user_id = null
             data.account_username = null
+            data.profile_picture_url = null
           }
         }
         return data
@@ -185,6 +186,7 @@ export const InstagramSettings: GlobalConfig = {
     },
     { name: 'posts_to_show', type: 'number', defaultValue: 8 },
     { name: 'account_username', type: 'text', admin: { readOnly: true } },
+    { name: 'profile_picture_url', type: 'textarea', label: 'Profile picture', admin: { readOnly: true, description: 'Filled in by the sync (link refreshes every hour).' } },
     { name: 'token_expires_at', type: 'date', admin: { readOnly: true, date: { pickerAppearance: 'dayAndTime' } } },
     { name: 'last_synced_at', type: 'date', admin: { readOnly: true, date: { pickerAppearance: 'dayAndTime' } } },
     { name: 'last_status', type: 'textarea', admin: { readOnly: true } },

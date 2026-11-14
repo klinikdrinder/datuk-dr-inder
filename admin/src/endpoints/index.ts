@@ -151,7 +151,7 @@ export const endpoints: Endpoint[] = [
         ig_id: p.ig_id, caption: p.caption, media_type: p.media_type, media_url: p.media_url,
         thumbnail_url: p.thumbnail_url, permalink: p.permalink, posted_at: p.posted_at, pinned: p.pinned,
       }))
-      return json({ username: s?.account_username || null, posts }, 200, { 'Cache-Control': 'public, max-age=300' })
+      return json({ username: s?.account_username || null, picture: s?.profile_picture_url || null, posts }, 200, { 'Cache-Control': 'public, max-age=300' })
     },
   },
   {

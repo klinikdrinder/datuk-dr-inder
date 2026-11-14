@@ -59,7 +59,7 @@ export default defineEventHandler(async () => {
       title: p.title, authors: p.authors, journal: p.journal, citation: p.citation, abstract: p.abstract, link: p.link,
       published_on: p.published_on, pdf: media(p.pdf), cover: media(p.cover, 'medium'),
     })),
-    instagram: { username: ig?.username || h.instagram_handle, posts: ig?.posts || [] },
+    instagram: { username: ig?.username || h.instagram_handle, picture: ig?.picture || null, posts: ig?.posts || [] },
     seminars: list(upcoming).map(mapSeminar),
     articles: list(articles).map(mapArticle),
     events: list(events).map(mapEventCard),

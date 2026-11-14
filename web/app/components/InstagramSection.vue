@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const props = defineProps<{ home: any; instagram: { username: string; posts: any[] } }>()
+const props = defineProps<{ home: any; instagram: { username: string; picture?: string | null; posts: any[] } }>()
+// Instagram picture links expire; if one fails to load, show the initial instead
+const picFailed = ref(false)
 const handle = computed(() => props.instagram.username || props.home.instagram_handle || 'datukdrinder')
 const url = computed(() => `https://www.instagram.com/${handle.value}/`)
 const img = (p: any) => (p.media_type === 'VIDEO' ? p.thumbnail_url : p.media_url || p.thumbnail_url)
@@ -13,7 +15,7 @@ const img = (p: any) => (p.media_type === 'VIDEO' ? p.thumbnail_url : p.media_ur
           <h2 class="h2" style="margin-top:22px"><AccentText :text="home.instagram_title" /></h2>
         </div>
         <div class="ig-head">
-          <span class="ig-avatar"><span>I</span></span>
+          <span class="ig-avatar"><img v-if="instagram.picture && !picFailed" :src="instagram.picture" :alt="`@${handle} on Instagram`" width="52" height="52" referrerpolicy="no-referrer" @error="picFailed = true"><span v-else>I</span></span>
           <div><b style="font:400 20px/1.2 var(--serif)">@{{ handle }}</b><div style="font-size:13px;color:var(--smoke)">New videos from the clinic, every day</div></div>
           <a class="btn btn-red" :href="url" target="_blank" rel="noopener">Follow</a>
         </div>
