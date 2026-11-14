@@ -1,3 +1,4 @@
+import { after } from 'next/server'
 import type { GlobalConfig } from 'payload'
 import { isEditor, loggedIn, publicRead, staffOnlyField } from '../lib/access'
 import { isInstagramLoginToken, syncInstagram } from '../lib/instagram'
@@ -161,7 +162,14 @@ export const InstagramSettings: GlobalConfig = {
     afterChange: [
       async ({ doc, previousDoc, req, context }) => {
         if (!context?.skipSync && doc.access_token && doc.access_token !== previousDoc?.access_token) {
-          await syncInstagram(req.payload).catch(() => {})
+          // Sync only after the save has finished: running it inside the save would hold the
+          // save's database transaction open while the sync needs connections of its own.
+          const run = () => syncInstagram(req.payload).catch((e) => req.payload.logger.error(`[instagram] ${e?.message || e}`))
+          try {
+            after(run)
+          } catch {
+            setTimeout(run, 0) // not inside a web request (e.g. a script): run on the next tick
+          }
         }
         return doc
       },
