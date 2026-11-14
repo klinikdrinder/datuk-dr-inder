@@ -5,6 +5,8 @@ const specialties = computed<string[]>(() => String(props.site.hero_specialties 
 // "Signature approach" banner over the photo (editable in the admin: Site settings → Hero)
 const signatureLabel = computed(() => props.site.signature_label || 'Signature approach')
 const signatureText = computed(() => props.site.signature_text || '')
+/** Icon for each specialty, picked from its wording so staff can rename them freely. */
+const iconFor = (t: string) => /hairline/i.test(t) ? 'hairline' : /donor/i.test(t) ? 'donor' : /correct|repair|revision/i.test(t) ? 'repair' : 'fue'
 const { openFilm } = useFilm()
 const canvas = ref<HTMLCanvasElement | null>(null)
 const mega = ref<HTMLElement | null>(null)
@@ -129,11 +131,16 @@ onBeforeUnmount(() => stop())
             <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8-4.3-4.1 5.9-.9z" /></svg></span>
             <span>{{ site.hero_specialties_label || 'Expert on' }}</span>
           </div>
-          <ol class="h-spec" aria-labelledby="spec-title">
+          <ul class="h-spec" aria-labelledby="spec-title">
             <li v-for="(t, i) in specialties" :key="t" :style="{ '--d': `${1 + i * 0.12}s` }">
-              <span class="n">{{ String(i + 1).padStart(2, '0') }}</span><span class="t">{{ t }}</span>
+              <span class="n" aria-hidden="true">
+                <svg v-if="iconFor(t) === 'fue'" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M6 34h36" /><path d="M16 34c0-9 2-16 7-23" /><path d="M24 34c0-9 2-17 8-24" /><path d="M32 34c0-8 2-14 7-19" /><circle cx="16" cy="37.5" r="2.2" /><circle cx="24" cy="37.5" r="2.2" /><circle cx="32" cy="37.5" r="2.2" /></svg>
+                <svg v-else-if="iconFor(t) === 'hairline'" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 41v-6c-5-3-8-8-8-14C9 12 16 6 24 6c8 0 14 6 14 14l3 7h-4v5c0 2-2 3-4 3h-4v6" /><path d="M11 17c3-5 9-8 15-7" stroke-dasharray="2.5 3" /></svg>
+                <svg v-else-if="iconFor(t) === 'donor'" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M6 30h36" /><path d="M24 30c0-8 1-14 5-20" /><ellipse cx="24" cy="34" rx="3" ry="4" /><g fill="currentColor" stroke="none"><circle cx="9" cy="22" r="1.6" /><circle cx="14" cy="22" r="1.6" /><circle cx="9" cy="17" r="1.6" /><circle cx="14" cy="17" r="1.6" /><circle cx="34" cy="22" r="1.6" /><circle cx="39" cy="22" r="1.6" /><circle cx="34" cy="17" r="1.6" /><circle cx="39" cy="17" r="1.6" /></g></svg>
+                <svg v-else viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M38 17A16 16 0 0 0 10 15" /><path d="M10 31a16 16 0 0 0 28 2" /><path d="M10 8v7h7" /><path d="M38 40v-7h-7" /><path d="M18 30h12" /><path d="M24 30c0-5 1-9 3-12" /><path d="M20 30c0-4 1-7 2-9" /></svg>
+              </span><span class="t">{{ t }}</span>
             </li>
-          </ol>
+          </ul>
         </div>
         <div class="h-stats">
           <div><div class="v">{{ site.stat_years?.replace('+', '') }}<em v-if="site.stat_years?.includes('+')">+</em></div><div class="k">{{ site.stat_years_label }}</div></div>
