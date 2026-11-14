@@ -1,6 +1,6 @@
 import type { GlobalConfig } from 'payload'
 import { isEditor, loggedIn, publicRead, staffOnlyField } from '../lib/access'
-import { syncInstagram } from '../lib/instagram'
+import { isInstagramLoginToken, syncInstagram } from '../lib/instagram'
 
 const tip = 'Put a word in *asterisks* to show it in red italics.'
 
@@ -138,15 +138,22 @@ export const HomeContent: GlobalConfig = {
 export const InstagramSettings: GlobalConfig = {
   slug: 'instagram-settings',
   label: 'Instagram connection',
-  admin: { group: 'Instagram', description: 'Paste the access token once; posts then sync every hour and the token renews itself.' },
+  admin: { group: 'Instagram', description: 'Paste the access token once; posts then sync every hour.' },
   access: { read: loggedIn, update: isEditor },
   hooks: {
     beforeChange: [
       ({ data, originalDoc, context }) => {
         if (context?.skipSync) return data
+        if (data.access_token) data.access_token = String(data.access_token).trim()
         if (data.access_token && data.access_token !== originalDoc?.access_token) {
-          data.token_expires_at = new Date(Date.now() + 59 * 86400 * 1000).toISOString()
+          // Instagram Login tokens last 60 days (renewed automatically); Facebook system-user tokens never expire
+          data.token_expires_at = isInstagramLoginToken(data.access_token) ? new Date(Date.now() + 59 * 86400 * 1000).toISOString() : null
           data.last_status = 'New token saved — syncing…'
+          // a new token may belong to another account: look the account up again unless an ID was typed in this save
+          if ((data.instagram_user_id || '') === (originalDoc?.instagram_user_id || '')) {
+            data.instagram_user_id = null
+            data.account_username = null
+          }
         }
         return data
       },
@@ -161,7 +168,13 @@ export const InstagramSettings: GlobalConfig = {
     ],
   },
   fields: [
-    { name: 'access_token', type: 'textarea', admin: { description: 'From developers.facebook.com → your app → Instagram → Generate access tokens.' } },
+    { name: 'access_token', type: 'textarea', admin: { description: 'From developers.facebook.com → your app → Use cases → Instagram API → generate the access token. Both Instagram-login and Facebook / Unified-login (system user) tokens work.' } },
+    {
+      name: 'instagram_user_id',
+      type: 'text',
+      label: 'Instagram user ID',
+      admin: { description: 'Usually filled in automatically. Only needed if Last status asks for it: the numeric Instagram account ID shown in the Meta app next to @datukdrinder.' },
+    },
     { name: 'posts_to_show', type: 'number', defaultValue: 8 },
     { name: 'account_username', type: 'text', admin: { readOnly: true } },
     { name: 'token_expires_at', type: 'date', admin: { readOnly: true, date: { pickerAppearance: 'dayAndTime' } } },

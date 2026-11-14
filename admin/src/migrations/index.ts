@@ -1,6 +1,7 @@
 import * as migration_20261110_081251_initial from './20261110_081251_initial';
 import * as migration_20261110_083028_blob_object_key from './20261110_083028_blob_object_key';
 import * as migration_20261114_035339_hero_signature_banner from './20261114_035339_hero_signature_banner';
+import * as migration_20261114_043536_instagram_user_id from './20261114_043536_instagram_user_id';
 
 export const migrations = [
   {
@@ -16,6 +17,11 @@ export const migrations = [
   {
     up: migration_20261114_035339_hero_signature_banner.up,
     down: migration_20261114_035339_hero_signature_banner.down,
-    name: '20261114_035339_hero_signature_banner'
+    name: '20261114_035339_hero_signature_banner',
+  },
+  {
+    up: migration_20261114_043536_instagram_user_id.up,
+    down: migration_20261114_043536_instagram_user_id.down,
+    name: '20261114_043536_instagram_user_id'
   },
 ];
