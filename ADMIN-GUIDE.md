@@ -42,7 +42,8 @@ Use this after every seminar, international congress, award night or TV/press ap
 ## Homepage text & photo galleries
 - **Homepage → Site settings → Founder video & LCP:** upload a short silent loop (**story_video**, MP4, 10–20 s, under ~10 MB) — it plays inside the arch in “The Founder”. Paste the full video with sound as a YouTube/Vimeo link in **story_video_url** (adds a “Watch” button). Upload the LCP certificate in **lcp_certificate** — always cover the IC number first.
 - **Homepage → Site settings:** hero text, hero photo, stats, the two floating cards, WhatsApp/phone/address, intro film link (YouTube or Vimeo link), SEO text, **notify_email** for alerts.
-- **Page Sections:** titles and text for each section, plus the photo galleries (**expertise_photos**, **leadership_photos**, **award_photos**).
+- **Homepage → Page sections:** titles and text for each section, plus the photo galleries (**expertise_photos**, **leadership_photos**, **award_photos**).
+  - **Expertise → Card photos:** one photo for each of the 4 cards (Hairline, FUE, Eyebrow, Beard), shown at the top of the card. Landscape (about 4:3) works best. Leave a slot empty to keep that card's drawing. Only use patient photos with written consent.
   - Tip: put a word in `*asterisks*` in a title to show it in red italics, e.g. `Leading the industry, not *following* it`.
   - Photo captions and alt text: **Settings → Media library** → click the photo → edit **Caption** and **Alternative text**.
 
