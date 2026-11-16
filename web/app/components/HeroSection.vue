@@ -8,7 +8,7 @@ const signatureText = computed(() => props.site.signature_text || '')
 /** Icon for each specialty, picked from its wording so staff can rename them freely. */
 const iconFor = (t: string) => /hairline/i.test(t) ? 'hairline' : /donor/i.test(t) ? 'donor' : /correct|repair|revision/i.test(t) ? 'repair' : 'fue'
 /** Credential cards floating over the photo (admin: Site settings → Hero → Credential cards). */
-const chips = computed(() => [1, 2, 3].map((n) => ({ title: props.site[`chip${n}_title`], text: props.site[`chip${n}_text`] })).filter((c) => c.title))
+const chips = computed(() => [1, 2, 3].map((n) => ({ title: props.site[`chip${n}_title`] })).filter((c) => c.title))
 const { openFilm } = useFilm()
 const canvas = ref<HTMLCanvasElement | null>(null)
 const mega = ref<HTMLElement | null>(null)
@@ -185,7 +185,7 @@ onBeforeUnmount(() => stop())
             <svg v-else-if="i === 1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5" /><path d="M12 6.4l.9 1.8 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2-1.5-1.4 2-.3z" /><path d="M8.6 13.4L7 21l5-2.6 5 2.6-1.6-7.6" /></svg>
             <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6.5 3h7.5l4 4v14h-11.5z" /><path d="M14 3v4h4" /><path d="M9.5 14.2l2 2 3.6-3.7" /></svg>
           </span>
-          <div><b>{{ c.title }}</b><span>{{ c.text }}</span></div>
+          <b>{{ c.title }}</b>
         </div>
       </div>
       <div class="h-left">
