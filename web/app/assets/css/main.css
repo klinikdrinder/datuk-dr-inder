@@ -355,7 +355,7 @@ footer .disc{max-width:62ch}
   .h-stats>div::before{left:0;right:auto}
   .mbar{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:55;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(var(--bg),.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--hairline)}
   .mbar .btn{justify-content:center;padding:14px 12px}
-  body{padding-bottom:76px}
+  body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   .ring-stage{height:400px}
   .award{width:200px;height:280px;left:-100px;top:-140px}
 }

@@ -85,7 +85,7 @@ export const SiteSettings: GlobalConfig = {
         {
           label: 'SEO',
           fields: [
-            { name: 'seo_title', type: 'text', defaultValue: 'Datuk Dr Inder | Hair Restoration Physician, Malaysia' },
+            { name: 'seo_title', type: 'text', defaultValue: 'Datuk Dr Inder | Hair Transplant & Long-Hair FUE, Petaling Jaya' },
             { name: 'seo_description', type: 'textarea' },
             { name: 'og_image', type: 'upload', relationTo: 'media', admin: { description: 'Image shown when the site is shared on WhatsApp/Facebook.' } },
           ],

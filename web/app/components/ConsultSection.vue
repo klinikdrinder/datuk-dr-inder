@@ -23,7 +23,7 @@ async function submit() {
 async function copy() {
   try { await navigator.clipboard.writeText('+' + props.site.whatsapp_number); copied.value = true; setTimeout(() => (copied.value = false), 1600) } catch { /* ignore */ }
 }
-const options = ['A consultation (not sure what I need)', 'Hair transplant (FUE)', 'Hairline restoration', 'Crown hair transplant', 'Eyebrow transplant', 'Beard transplant', 'Corrective hair transplant', 'Scalp micropigmentation', 'Seminar or speaking invitation', 'Media enquiry']
+const options = ['A consultation (not sure what I need)', 'iGraft Long-Hair FUE', 'Hair transplant (FUE)', 'Hairline restoration', 'Crown hair transplant', 'Eyebrow transplant', 'Beard transplant', 'Corrective hair transplant', 'Scalp micropigmentation', 'Seminar or speaking invitation', 'Media enquiry']
 </script>
 <template>
   <section id="consult" class="sec alt consult">

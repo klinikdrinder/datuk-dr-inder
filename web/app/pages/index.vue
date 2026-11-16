@@ -4,6 +4,9 @@ const d = computed(() => data.value!)
 const awardsCount = computed(() => d.value.awards.length)
 const awardYears = computed(() => new Set(d.value.awards.map((a: any) => String(a.year).slice(0, 4))).size)
 const cfg = useRuntimeConfig()
+// postcode comes from the address typed in the admin (e.g. "46200 Petaling Jaya, Selangor")
+const postcode = computed(() => String(d.value.site.address_line2 || '').match(/\b\d{5}\b/)?.[0])
+const specialties = computed(() => String(d.value.site.hero_specialties || '').split('\n').map((x) => x.trim()).filter(Boolean))
 useSeoMeta({
   title: () => d.value.site.seo_title,
   description: () => d.value.site.seo_description,
@@ -21,8 +24,8 @@ useHead({
       '@context': 'https://schema.org', '@type': 'Physician',
       name: 'Datuk Dr Inderjit Kaur (DPSM)', alternateName: 'Datuk Dr Inder', url: cfg.public.siteUrl,
       image: `${cfg.public.siteUrl}/images/datuk-dr-inder-hero.webp`,
-      medicalSpecialty: 'Dermatology', description: d.value.site.seo_description,
-      address: { '@type': 'PostalAddress', streetAddress: d.value.site.address_line1, addressLocality: 'Petaling Jaya', postalCode: '46000', addressRegion: 'Selangor', addressCountry: 'MY' },
+      knowsAbout: ['Hair restoration', 'Hair transplantation', ...specialties.value], description: d.value.site.seo_description,
+      address: { '@type': 'PostalAddress', streetAddress: d.value.site.address_line1, addressLocality: 'Petaling Jaya', ...(postcode.value ? { postalCode: postcode.value } : {}), addressRegion: 'Selangor', addressCountry: 'MY' },
       telephone: '+' + d.value.site.whatsapp_number,
       memberOf: ['International Society of Hair Restoration Surgery', 'Asian Association of Hair Restoration Surgeons', 'FUE Society Malaysia'].map((name) => ({ '@type': 'Organization', name })),
       sameAs: [`https://www.instagram.com/${d.value.home.instagram_handle}/`],
