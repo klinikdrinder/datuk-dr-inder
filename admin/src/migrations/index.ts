@@ -4,6 +4,7 @@ import * as migration_20261114_035339_hero_signature_banner from './20261114_035
 import * as migration_20261114_043536_instagram_user_id from './20261114_043536_instagram_user_id';
 import * as migration_20261114_055308_instagram_profile_picture from './20261114_055308_instagram_profile_picture';
 import * as migration_20261116_044831_expertise_card_photos from './20261116_044831_expertise_card_photos';
+import * as migration_20261116_080331_hero_credential_cards from './20261116_080331_hero_credential_cards';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20261116_044831_expertise_card_photos.up,
     down: migration_20261116_044831_expertise_card_photos.down,
-    name: '20261116_044831_expertise_card_photos'
+    name: '20261116_044831_expertise_card_photos',
+  },
+  {
+    up: migration_20261116_080331_hero_credential_cards.up,
+    down: migration_20261116_080331_hero_credential_cards.down,
+    name: '20261116_080331_hero_credential_cards'
   },
 ];

@@ -29,10 +29,22 @@ export const SiteSettings: GlobalConfig = {
               ],
             },
             {
-              type: 'row',
+              type: 'collapsible',
+              label: 'Credential cards on the photo',
+              admin: { description: 'Three small cards floating over the hero photo.' },
               fields: [
-                { name: 'chip1_title', type: 'text', defaultValue: 'ABHRS Diplomate', label: 'Floating card title' },
-                { name: 'chip1_text', type: 'text', defaultValue: 'American Board of Hair Restoration Surgery', label: 'Floating card text' },
+                { type: 'row', fields: [
+                  { name: 'chip1_title', type: 'text', defaultValue: 'ABHRS Diplomate', label: 'Card 1 title' },
+                  { name: 'chip1_text', type: 'text', defaultValue: 'American Board of Hair Restoration Surgery', label: 'Card 1 text' },
+                ] },
+                { type: 'row', fields: [
+                  { name: 'chip2_title', type: 'text', defaultValue: 'Fellow ISHRS', label: 'Card 2 title' },
+                  { name: 'chip2_text', type: 'text', defaultValue: 'International Society of Hair Restoration Surgery', label: 'Card 2 text' },
+                ] },
+                { type: 'row', fields: [
+                  { name: 'chip3_title', type: 'text', defaultValue: 'LCP Certified', label: 'Card 3 title' },
+                  { name: 'chip3_text', type: 'text', defaultValue: 'Ministry of Health Malaysia', label: 'Card 3 text' },
+                ] },
               ],
             },
             { name: 'hero_specialties_label', type: 'text', defaultValue: 'Expert on', label: 'Specialties card heading' },

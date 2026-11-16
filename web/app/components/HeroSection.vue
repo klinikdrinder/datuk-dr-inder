@@ -7,11 +7,80 @@ const signatureLabel = computed(() => props.site.signature_label || 'Signature a
 const signatureText = computed(() => props.site.signature_text || '')
 /** Icon for each specialty, picked from its wording so staff can rename them freely. */
 const iconFor = (t: string) => /hairline/i.test(t) ? 'hairline' : /donor/i.test(t) ? 'donor' : /correct|repair|revision/i.test(t) ? 'repair' : 'fue'
+/** Credential cards floating over the photo (admin: Site settings → Hero → Credential cards). */
+const chips = computed(() => [1, 2, 3].map((n) => ({ title: props.site[`chip${n}_title`], text: props.site[`chip${n}_text`] })).filter((c) => c.title))
 const { openFilm } = useFilm()
 const canvas = ref<HTMLCanvasElement | null>(null)
 const mega = ref<HTMLElement | null>(null)
 const cutWrap = ref<HTMLElement | null>(null)
 const hero = ref<HTMLElement | null>(null)
+const photo = ref<HTMLImageElement | null>(null)
+const gapEl = ref<HTMLElement | null>(null)
+
+/*
+ * Keep "Meet Datuk | Dr Inder" clear of her head. The head in the cut-out is not centred,
+ * so the gap in the title is sized and moved to wherever the photo's outline actually is
+ * at the height of the title. Works for any cut-out photo uploaded in the admin.
+ */
+let outline: ([number, number] | null)[] | null = null
+function readOutline() {
+  const el = photo.value
+  if (!el?.naturalWidth) return
+  try {
+    const W = 80, H = Math.round((W * el.naturalHeight) / el.naturalWidth)
+    const c = document.createElement('canvas'); c.width = W; c.height = H
+    const x = c.getContext('2d', { willReadFrequently: true })!
+    x.drawImage(el, 0, 0, W, H)
+    const d = x.getImageData(0, 0, W, H).data
+    outline = []
+    for (let y = 0; y < H; y++) {
+      let l = -1, r = -1
+      for (let i = 0; i < W; i++) if (d[(y * W + i) * 4 + 3]! > 60) { if (l < 0) l = i; r = i }
+      outline.push(l < 0 ? null : [l / W, (r + 1) / W])
+    }
+  } catch { outline = null } // photo can't be read (e.g. no CORS): keep the standard gap
+}
+/** Position of an element inside the hero, ignoring animations and parallax (offsets skip transforms). */
+function at(el: HTMLElement) {
+  let x = 0, y = 0, e: HTMLElement | null = el
+  while (e && e !== hero.value) { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent as HTMLElement | null }
+  return { x, y }
+}
+function fitTitle() {
+  const m = mega.value, g = gapEl.value, el = photo.value
+  if (!m || !g) return
+  m.style.paddingLeft = m.style.paddingRight = m.style.fontSize = ''
+  g.style.width = ''
+  if (innerWidth <= 860 || !outline || !el?.offsetHeight) return
+  const words = m.querySelectorAll<HTMLElement>('.w')
+  if (words.length < 4) return
+  for (let pass = 0; pass < 2; pass++) {
+    const fs = parseFloat(getComputedStyle(m).fontSize)
+    const mPos = at(m)
+    const top = mPos.y + words[0]!.offsetTop + words[0]!.offsetHeight * 0.12
+    const bottom = mPos.y + words[0]!.offsetTop + words[0]!.offsetHeight * 0.9
+    // the image is anchored at left:50% and shifted by translateX(-50%), so its offsetLeft is its centre
+    const iPos = at(el), iw = el.offsetWidth, ih = el.offsetHeight, left0 = iPos.x - iw / 2
+    let L = Infinity, R = -Infinity
+    for (let y = Math.max(top, iPos.y); y <= Math.min(bottom, iPos.y + ih); y += 2) {
+      const row = outline[Math.min(outline.length - 1, Math.floor(((y - iPos.y) / ih) * outline.length))]
+      if (row) { L = Math.min(L, row[0]); R = Math.max(R, row[1]) }
+    }
+    if (L === Infinity) return // photo is below the title: nothing to avoid
+    const margin = fs * 0.14 + 22 // breathing room + parallax movement
+    const headL = left0 + L * iw - margin, headR = left0 + R * iw + margin
+    const gap = Math.max(headR - headL, fs * 1.3)
+    const centre = (headL + headR) / 2, mCentre = mPos.x + m.offsetWidth / 2
+    const shift = centre - mCentre
+    // room left for each half of the title after the gap and the shift
+    const room = (m.offsetWidth - gap - Math.abs(shift) * 2) / 2
+    const need = Math.max(words[0]!.offsetWidth + words[1]!.offsetWidth, words[2]!.offsetWidth + words[3]!.offsetWidth) + fs * 0.3
+    if (room < need && pass === 0) { m.style.fontSize = `${Math.max(48, fs * (room / need))}px`; continue }
+    g.style.width = `${gap}px`
+    if (shift > 0) m.style.paddingLeft = `${shift * 2}px`; else m.style.paddingRight = `${-shift * 2}px`
+    return
+  }
+}
 const smokeOn = ref(false)
 let stop = () => {}
 
@@ -87,7 +156,12 @@ onMounted(() => {
     } else if (mega.value && cutWrap.value) { mega.value.style.transform = ''; cutWrap.value.style.transform = ''; mega.value.style.opacity = '' }
   }
   if (!reduce) raf = requestAnimationFrame(frame)
-  stop = () => { cancelAnimationFrame(raf); io.disconnect(); window.removeEventListener('pointermove', onMove); window.removeEventListener('resize', size) }
+  const onPhoto = () => { readOutline(); fitTitle() }
+  const el = photo.value
+  if (el?.complete && el.naturalWidth) onPhoto(); else el?.addEventListener('load', onPhoto, { once: true })
+  document.fonts?.ready.then(fitTitle)
+  window.addEventListener('resize', fitTitle)
+  stop = () => { cancelAnimationFrame(raf); io.disconnect(); window.removeEventListener('pointermove', onMove); window.removeEventListener('resize', size); window.removeEventListener('resize', fitTitle); el?.removeEventListener('load', onPhoto) }
 })
 onBeforeUnmount(() => stop())
 </script>
@@ -97,17 +171,21 @@ onBeforeUnmount(() => stop())
     <canvas id="smoke" ref="canvas" :class="{ on: smokeOn }" aria-hidden="true" />
     <div class="stage">
       <h1 id="mega" ref="mega" class="mega" aria-label="Meet Datuk Dr Inder">
-        <span class="half hl"><span class="w">Meet</span> <span class="w">Datuk</span></span><span class="gap" aria-hidden="true" /><span class="half hr"><span class="w">Dr</span> <span class="w red">Inder</span></span>
+        <span class="half hl"><span class="w">Meet</span> <span class="w">Datuk</span></span><span ref="gapEl" class="gap" aria-hidden="true" /><span class="half hr"><span class="w">Dr</span> <span class="w red">Inder</span></span>
       </h1>
       <div id="cutWrap" ref="cutWrap" class="cut-wrap">
         <div class="arch-bg" aria-hidden="true" />
         <div class="orbit" aria-hidden="true"><i /><i /><i /></div>
         <div class="cut-img">
-          <img class="cutout" :src="site.hero_photo?.url" :alt="site.hero_photo?.alt || 'Datuk Dr Inderjit Kaur'" fetchpriority="high">
+          <img ref="photo" class="cutout" crossorigin="anonymous" :src="site.hero_photo?.url" :alt="site.hero_photo?.alt || 'Datuk Dr Inderjit Kaur'" fetchpriority="high">
         </div>
-        <div class="chip c1">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z" /><path d="M8.5 12l2.3 2.3 4.7-4.6" /></svg></span>
-          <div><b>{{ site.chip1_title }}</b><span>{{ site.chip1_text }}</span></div>
+        <div v-for="(c, i) in chips" :key="i" class="chip" :class="`c${i + 1}`">
+          <span class="ic">
+            <svg v-if="i === 0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z" /><path d="M8.5 12l2.3 2.3 4.7-4.6" /></svg>
+            <svg v-else-if="i === 1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5" /><path d="M12 6.4l.9 1.8 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2-1.5-1.4 2-.3z" /><path d="M8.6 13.4L7 21l5-2.6 5 2.6-1.6-7.6" /></svg>
+            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6.5 3h7.5l4 4v14h-11.5z" /><path d="M14 3v4h4" /><path d="M9.5 14.2l2 2 3.6-3.7" /></svg>
+          </span>
+          <div><b>{{ c.title }}</b><span>{{ c.text }}</span></div>
         </div>
       </div>
       <div class="h-left">
