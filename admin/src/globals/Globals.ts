@@ -119,7 +119,28 @@ export const HomeContent: GlobalConfig = {
           fields: [{ name: 'philosophy_quote', type: 'textarea', defaultValue: 'Hair restoration should never look artificial, and results should age naturally with the patient.' }],
         },
         section('credentials', 'Credentials', 'Internationally certified. Globally *trusted*.'),
-        section('expertise', 'Expertise', 'Precision. Artistry. *Natural* results.', 'expertise_photos'),
+        {
+          ...section('expertise', 'Expertise', 'Precision. Artistry. *Natural* results.', 'expertise_photos'),
+          fields: [
+            ...section('expertise', 'Expertise', 'Precision. Artistry. *Natural* results.').fields,
+            {
+              type: 'collapsible',
+              label: 'Card photos',
+              admin: { description: 'One photo per card, shown at the top of the card. Landscape works best (about 4:3). Leave empty to keep the drawing. Use only photos with written patient consent.' },
+              fields: [
+                { type: 'row', fields: [
+                  { name: 'expertise_hairline_photo', type: 'upload', relationTo: 'media', label: 'Hairline restoration' },
+                  { name: 'expertise_fue_photo', type: 'upload', relationTo: 'media', label: 'FUE hair transplantation' },
+                ] },
+                { type: 'row', fields: [
+                  { name: 'expertise_brow_photo', type: 'upload', relationTo: 'media', label: 'Eyebrow design & restoration' },
+                  { name: 'expertise_beard_photo', type: 'upload', relationTo: 'media', label: 'Beard restoration' },
+                ] },
+              ],
+            },
+            { name: 'expertise_photos', type: 'upload', relationTo: 'media', hasMany: true, admin: { description: 'Optional extra photo gallery shown under the cards.' } },
+          ],
+        },
         section('leadership', 'Leadership', 'Leading the industry, not *following* it', 'leadership_photos'),
         section('awards', 'Awards', 'Recognised excellence across Asia-Pacific', 'award_photos'),
         section('clinic', 'Clinic', 'Klinik Dr Inder, where expertise meets *care*'),

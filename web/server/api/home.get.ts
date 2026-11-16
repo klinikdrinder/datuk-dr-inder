@@ -43,6 +43,11 @@ export default defineEventHandler(async () => {
     home: {
       ...h,
       expertise_photos: (home?.data?.expertise_photos || []).map((m: any) => media(m, 'large')),
+      // one photo per Expertise card (empty = the card keeps its drawing)
+      expertise_hairline_photo: media(home?.data?.expertise_hairline_photo, 'medium'),
+      expertise_fue_photo: media(home?.data?.expertise_fue_photo, 'medium'),
+      expertise_brow_photo: media(home?.data?.expertise_brow_photo, 'medium'),
+      expertise_beard_photo: media(home?.data?.expertise_beard_photo, 'medium'),
       leadership_photos: (home?.data?.leadership_photos || []).map((m: any) => media(m, 'large')),
       award_photos: (home?.data?.award_photos || []).map((m: any) => media(m, 'large')),
     },

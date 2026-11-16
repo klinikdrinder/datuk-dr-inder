@@ -218,6 +218,10 @@ section{position:relative}
 .card:hover{border-color:rgba(200,16,46,.4)}
 .card .glare{position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(var(--gold),.12),transparent 45%);opacity:0;transition:opacity .4s;pointer-events:none}
 .card:hover .glare{opacity:1}
+.card .card-photo{position:relative;margin:-30px -26px 22px;height:clamp(170px,15vw,220px);overflow:hidden;border-radius:21px 21px 0 0;transform:translateZ(30px)}
+.card .card-photo::after{content:"";position:absolute;inset:auto 0 0;height:40%;background:linear-gradient(180deg,transparent,rgba(var(--bg),.35));pointer-events:none}
+.card .card-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.card:hover .card-photo img{transform:scale(1.06)}
 .card canvas{width:100%;height:120px;display:block;transform:translateZ(40px);margin-bottom:18px}
 .card h3{font-size:25px;line-height:1.15;transform:translateZ(30px)}
 .card p{margin-top:12px;color:var(--smoke);font-size:14.5px;transform:translateZ(20px)}

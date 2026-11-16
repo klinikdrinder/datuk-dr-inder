@@ -1,11 +1,13 @@
 <script setup lang="ts">
-defineProps<{ home: any }>()
+const props = defineProps<{ home: any }>()
 const cards = [
   { art: 'hairline', title: 'Hairline restoration', text: 'Hairlines designed to fit the face and the patient’s age, with the irregular edge of a natural hairline.', unit: 'Design · ', unitB: 'Density · Direction' },
   { art: 'fue', title: 'FUE hair transplantation', text: 'Follicular Unit Extraction, which removes grafts one unit at a time and leaves no linear scar.', unit: 'Grafts of ', unitB: '1–4 hairs' },
   { art: 'brow', title: 'Eyebrow design & restoration', text: 'Brows planned hair by hair, following the angle and direction of natural growth.', unit: 'Facial hair · ', unitB: 'Single-hair grafts' },
   { art: 'beard', title: 'Beard restoration', text: 'Fuller, even beards and moustaches for patchy or scarred areas.', unit: 'Facial hair · ', unitB: 'Contour · Coverage' },
 ]
+/** Photo uploaded in the admin for this card (Page sections → Expertise → Card photos), if any. */
+const photoFor = (art: string) => props.home?.[`expertise_${art}_photo`] || null
 const root = ref<HTMLElement | null>(null)
 let timer: any
 onMounted(() => {
@@ -37,7 +39,10 @@ onBeforeUnmount(() => clearInterval(timer))
         <div v-for="c in cards" :key="c.art" v-reveal class="tilt rv">
           <article class="card">
             <span class="glare" />
-            <canvas :data-art="c.art" aria-hidden="true" />
+            <figure v-if="photoFor(c.art)" class="card-photo">
+              <img :src="photoFor(c.art).url" :alt="photoFor(c.art).alt || c.title" loading="lazy" decoding="async">
+            </figure>
+            <canvas v-else :data-art="c.art" aria-hidden="true" />
             <h3>{{ c.title }}</h3>
             <p>{{ c.text }}</p>
             <div class="unit">{{ c.unit }}<b>{{ c.unitB }}</b></div>

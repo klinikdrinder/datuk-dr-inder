@@ -3,6 +3,7 @@ import * as migration_20261110_083028_blob_object_key from './20261110_083028_bl
 import * as migration_20261114_035339_hero_signature_banner from './20261114_035339_hero_signature_banner';
 import * as migration_20261114_043536_instagram_user_id from './20261114_043536_instagram_user_id';
 import * as migration_20261114_055308_instagram_profile_picture from './20261114_055308_instagram_profile_picture';
+import * as migration_20261116_044831_expertise_card_photos from './20261116_044831_expertise_card_photos';
 
 export const migrations = [
   {
@@ -28,6 +29,11 @@ export const migrations = [
   {
     up: migration_20261114_055308_instagram_profile_picture.up,
     down: migration_20261114_055308_instagram_profile_picture.down,
-    name: '20261114_055308_instagram_profile_picture'
+    name: '20261114_055308_instagram_profile_picture',
+  },
+  {
+    up: migration_20261116_044831_expertise_card_photos.up,
+    down: migration_20261116_044831_expertise_card_photos.down,
+    name: '20261116_044831_expertise_card_photos'
   },
 ];
