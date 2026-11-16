@@ -179,14 +179,6 @@ onBeforeUnmount(() => stop())
         <div class="cut-img">
           <img ref="photo" class="cutout" crossorigin="anonymous" :src="site.hero_photo?.url" :alt="site.hero_photo?.alt || 'Datuk Dr Inderjit Kaur'" fetchpriority="high">
         </div>
-        <div v-for="(c, i) in chips" :key="i" class="chip" :class="`c${i + 1}`">
-          <span class="ic">
-            <svg v-if="i === 0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z" /><path d="M8.5 12l2.3 2.3 4.7-4.6" /></svg>
-            <svg v-else-if="i === 1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5" /><path d="M12 6.4l.9 1.8 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2-1.5-1.4 2-.3z" /><path d="M8.6 13.4L7 21l5-2.6 5 2.6-1.6-7.6" /></svg>
-            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6.5 3h7.5l4 4v14h-11.5z" /><path d="M14 3v4h4" /><path d="M9.5 14.2l2 2 3.6-3.7" /></svg>
-          </span>
-          <b>{{ c.title }}</b>
-        </div>
       </div>
       <div class="h-left">
         <div class="eyebrow">{{ site.hero_eyebrow }}</div>
@@ -223,6 +215,16 @@ onBeforeUnmount(() => stop())
         <div class="h-stats">
           <div><div class="v">{{ site.stat_years?.replace('+', '') }}<em v-if="site.stat_years?.includes('+')">+</em></div><div class="k">{{ site.stat_years_label }}</div></div>
           <div><div class="v">{{ awardsCount }}</div><div class="k">{{ site.stat_awards_label }}</div></div>
+        </div>
+      </div>
+      <div v-if="chips.length" class="hx-creds" :class="{ solo: !signatureText }">
+        <div v-for="(c, i) in chips" :key="i" class="cred" :style="{ '--d': `${1 + i * 0.12}s` }">
+          <span class="ic">
+            <svg v-if="i === 0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z" /><path d="M8.5 12l2.3 2.3 4.7-4.6" /></svg>
+            <svg v-else-if="i === 1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5" /><path d="M12 6.4l.9 1.8 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2-1.5-1.4 2-.3z" /><path d="M8.6 13.4L7 21l5-2.6 5 2.6-1.6-7.6" /></svg>
+            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6.5 3h7.5l4 4v14h-11.5z" /><path d="M14 3v4h4" /><path d="M9.5 14.2l2 2 3.6-3.7" /></svg>
+          </span>
+          <b>{{ c.title }}</b>
         </div>
       </div>
       <div v-if="signatureText" class="hx-sign">
