@@ -2,6 +2,7 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { attachDatabasePool } from '@vercel/functions'
 import path from 'path'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
@@ -51,6 +52,12 @@ export default buildConfig({
   ].map(withRevalidate),
   globals: [withRevalidateGlobal(SiteSettings), withRevalidateGlobal(HomeContent), InstagramSettings],
   endpoints,
+  // Vercel pauses idle function copies; without this their open database connections stay counted
+  // by the Supabase pooler until its 200-client limit is reached and every request fails (EMAXCONN).
+  onInit: async (payload) => {
+    const pool = (payload.db as any)?.pool
+    if (process.env.VERCEL && pool) attachDatabasePool(pool)
+  },
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },

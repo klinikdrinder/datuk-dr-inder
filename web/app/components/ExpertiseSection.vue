@@ -1,13 +1,14 @@
 <script setup lang="ts">
 const props = defineProps<{ home: any }>()
+// photoKey = which "Card photos" slot in the admin belongs to this card
 const cards = [
-  { art: 'hairline', title: 'Hairline restoration', text: 'Hairlines designed to fit the face and the patient’s age, with the irregular edge of a natural hairline.', unit: 'Design · ', unitB: 'Density · Direction' },
-  { art: 'fue', title: 'FUE hair transplantation', text: 'Follicular Unit Extraction, which removes grafts one unit at a time and leaves no linear scar.', unit: 'Grafts of ', unitB: '1–4 hairs' },
-  { art: 'brow', title: 'Eyebrow design & restoration', text: 'Brows planned hair by hair, following the angle and direction of natural growth.', unit: 'Facial hair · ', unitB: 'Single-hair grafts' },
-  { art: 'beard', title: 'Beard restoration', text: 'Fuller, even beards and moustaches for patchy or scarred areas.', unit: 'Facial hair · ', unitB: 'Contour · Coverage' },
+  { art: 'igraft', photoKey: 'fue', title: 'iGraft Long-Hair FUE', text: 'FUE performed with the hair left long, so there is no need to shave the head and the design can be judged on the day.', unit: 'Unshaven · ', unitB: 'Same-day preview' },
+  { art: 'hairline', photoKey: 'hairline', title: 'Hairline Design & Temple Blending', text: 'Hairlines designed to fit the face and age, with soft, irregular edges blended into the temples.', unit: 'Design · ', unitB: 'Density · Direction' },
+  { art: 'donor', photoKey: 'brow', title: 'Donor Assessment & Long-Term Planning', text: 'The donor area is mapped and protected, so grafts are used wisely and future hair loss is planned for.', unit: 'Donor mapping · ', unitB: 'Graft budget' },
+  { art: 'corrective', photoKey: 'beard', title: 'Corrective Hair Transplantation', text: 'Repair of earlier transplants: unnatural hairlines, pluggy grafts or visible scars refined to look natural.', unit: 'Repair · ', unitB: 'Refinement' },
 ]
 /** Photo uploaded in the admin for this card (Page sections → Expertise → Card photos), if any. */
-const photoFor = (art: string) => props.home?.[`expertise_${art}_photo`] || null
+const photoFor = (key: string) => props.home?.[`expertise_${key}_photo`] || null
 const root = ref<HTMLElement | null>(null)
 let timer: any
 onMounted(() => {
@@ -39,8 +40,8 @@ onBeforeUnmount(() => clearInterval(timer))
         <div v-for="c in cards" :key="c.art" v-reveal class="tilt rv">
           <article class="card">
             <span class="glare" />
-            <figure v-if="photoFor(c.art)" class="card-photo">
-              <img :src="photoFor(c.art).url" :alt="photoFor(c.art).alt || c.title" loading="lazy" decoding="async">
+            <figure v-if="photoFor(c.photoKey)" class="card-photo">
+              <img :src="photoFor(c.photoKey).url" :alt="photoFor(c.photoKey).alt || c.title" loading="lazy" decoding="async">
             </figure>
             <canvas v-else :data-art="c.art" aria-hidden="true" />
             <h3>{{ c.title }}</h3>

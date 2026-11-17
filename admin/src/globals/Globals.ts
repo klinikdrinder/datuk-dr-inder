@@ -140,13 +140,14 @@ export const HomeContent: GlobalConfig = {
               label: 'Card photos',
               admin: { description: 'One photo per card, shown at the top of the card. Landscape works best (about 4:3). Leave empty to keep the drawing. Use only photos with written patient consent.' },
               fields: [
+                // field names are from the earlier card set; labels follow the current cards
                 { type: 'row', fields: [
-                  { name: 'expertise_hairline_photo', type: 'upload', relationTo: 'media', label: 'Hairline restoration' },
-                  { name: 'expertise_fue_photo', type: 'upload', relationTo: 'media', label: 'FUE hair transplantation' },
+                  { name: 'expertise_fue_photo', type: 'upload', relationTo: 'media', label: 'iGraft Long-Hair FUE' },
+                  { name: 'expertise_hairline_photo', type: 'upload', relationTo: 'media', label: 'Hairline Design & Temple Blending' },
                 ] },
                 { type: 'row', fields: [
-                  { name: 'expertise_brow_photo', type: 'upload', relationTo: 'media', label: 'Eyebrow design & restoration' },
-                  { name: 'expertise_beard_photo', type: 'upload', relationTo: 'media', label: 'Beard restoration' },
+                  { name: 'expertise_brow_photo', type: 'upload', relationTo: 'media', label: 'Donor Assessment & Long-Term Planning' },
+                  { name: 'expertise_beard_photo', type: 'upload', relationTo: 'media', label: 'Corrective Hair Transplantation' },
                 ] },
               ],
             },

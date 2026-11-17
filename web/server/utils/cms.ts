@@ -97,13 +97,19 @@ function norm(v: any): any {
 }
 
 /** GET from the CMS. Returns null instead of throwing, so the site still renders if the CMS is down. */
-export async function cmsGet<T = any>(path: string, query: Record<string, any> = {}): Promise<T | null> {
+/**
+ * Read from the admin. A real "not found" returns null. If the admin can't be reached, this throws
+ * (503) instead of returning nothing: the page then fails to rebuild and Vercel keeps showing the
+ * last good version, rather than caching a page made of built-in placeholder text.
+ * Pass { optional: true } for extras (e.g. Instagram) that may simply be left out.
+ */
+export async function cmsGet<T = any>(path: string, query: Record<string, any> = {}, opts: { optional?: boolean } = {}): Promise<T | null> {
   const { cmsUrl } = useRuntimeConfig()
   const g = GLOBALS[path]
   const url = g ? `/api/globals/${g}` : `/api${path}`
   const q = qs.stringify(g ? { depth: 1 } : payloadQuery(query), { encodeValuesOnly: true })
   try {
-    const r: any = await $fetch(`${url}${q ? `?${q}` : ''}`, { baseURL: cmsUrl, timeout: 8000, retry: 1 })
+    const r: any = await $fetch(`${url}${q ? `?${q}` : ''}`, { baseURL: cmsUrl, timeout: 8000, retry: 0 })
     if (path.startsWith('/website/')) return r
     if (Array.isArray(r?.docs)) {
       return {
@@ -113,8 +119,10 @@ export async function cmsGet<T = any>(path: string, query: Record<string, any> =
     }
     return { data: norm(r) } as T
   } catch (e: any) {
+    const status = e?.statusCode ?? e?.response?.status
+    if (status === 404 || opts.optional) return null
     console.warn(`[cms] GET ${path} failed: ${e?.message || e}`)
-    return null
+    throw createError({ statusCode: 503, statusMessage: 'Content temporarily unavailable' })
   }
 }
 

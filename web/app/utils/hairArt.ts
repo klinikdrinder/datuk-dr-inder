@@ -1,4 +1,4 @@
-// Small line drawings for the expertise cards (hairline, FUE units, eyebrow, beard)
+// Small line drawings for the expertise cards (long-hair FUE, hairline, donor planning, corrective)
 /* eslint-disable */
 // @ts-nocheck
 function rnd(s: number){return function(){s=(s*9301+49297)%233280;return s/233280}}
@@ -19,35 +19,49 @@ export function drawArt(cv: HTMLCanvasElement, t: number){
     }
     g.setLineDash([3,5]); g.strokeStyle=`rgba(${CR},.7)`; g.beginPath();
     for(let x=10;x<=w-10;x+=4){const u=(x-10)/(w-20);g.lineTo(x,h*.76-Math.sin(u*Math.PI)*h*.32)} g.stroke(); g.setLineDash([]);
-  } else if(kind==='fue'){
-    // follicular units: grouped 1–4 hairs on a grid
+  } else if(kind==='igraft'){
+    // long-hair FUE: long strands rising from the skin and swaying, a few freshly placed grafts in red
+    const base=h*.86;
+    g.strokeStyle=`rgba(${CH},.35)`; g.lineWidth=1; g.beginPath(); g.moveTo(10,base); g.lineTo(w-10,base); g.stroke();
+    for(let i=0;i<34;i++){
+      const x=16+R()*(w-32), len=h*(.5+R()*.28), red=R()<.12, sway=Math.sin(t*.9+i*.7)*6;
+      const bend=(R()-.5)*30+sway;
+      g.strokeStyle=`rgba(${red?CR:CH},${red?.95:.4+R()*.5})`; g.lineWidth=red?1.4:1.1;
+      g.beginPath(); g.moveTo(x,base); g.bezierCurveTo(x+bend*.2,base-len*.4,x+bend*.9,base-len*.7,x+bend,base-len); g.stroke();
+      g.fillStyle=`rgba(${red?CR:CH},${red?1:.6})`; g.beginPath(); g.arc(x,base+2,red?2:1.3,0,Math.PI*2); g.fill();
+    }
+  } else if(kind==='donor'){
+    // donor area: follicular units on a grid, the safe zone dashed, harvests spread out (in red)
     const cols=9, rows=4;
+    g.setLineDash([3,5]); g.strokeStyle=`rgba(${CR},.55)`; g.lineWidth=1;
+    const zy=18+((h-36)/(rows-1))*.5-12, zh=((h-36)/(rows-1))*2+24;
+    g.beginPath(); g.roundRect?g.roundRect(8,zy,w-16,zh,12):g.rect(8,zy,w-16,zh); g.stroke(); g.setLineDash([]);
     for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
       const cx=18+c*((w-36)/(cols-1))+(R()-.5)*6, cy=18+r*((h-36)/(rows-1))+(R()-.5)*6;
-      const n=1+Math.floor(R()*4), hl=(r===1&&c===4);
-      g.strokeStyle=hl?`rgba(${CR},1)`:`rgba(${CH},.25)`; g.lineWidth=1;
-      g.beginPath(); g.arc(cx,cy,hl?9+Math.sin(t*2)*1.5:6,0,Math.PI*2); g.stroke();
-      for(let k=0;k<n;k++){g.fillStyle=hl?`rgba(${CR},1)`:`rgba(${CH},.8)`;g.beginPath();g.arc(cx+(k-(n-1)/2)*2.6,cy,1.1,0,Math.PI*2);g.fill()}
-    }
-  } else if(kind==='brow'){
-    // eyebrow: hairs whose angle turns from upward (head) to lateral (tail)
-    for(let i=0;i<110;i++){
-      const u=R(), x=16+u*(w-32), arch=Math.sin(Math.min(1,u*1.4)*Math.PI*.9);
-      const y=h*.7-arch*h*.32+(R()-.5)*(16*(1-u*.6));
-      const a=-Math.PI/2*(1-u)+(-0.15)*u + Math.sin(t+i*.3)*.04, len=8+R()*8*(1-u*.4);
-      g.strokeStyle=`rgba(${u>.45&&u<.5?CR:CH},${.4+R()*.55})`; g.lineWidth=1.1;
-      g.beginPath(); g.moveTo(x,y); g.lineTo(x+Math.cos(a)*len,y+Math.sin(a)*len); g.stroke();
+      const n=1+Math.floor(R()*4), inZone=r===1||r===2, pick=inZone&&(c+r*2)%3===0;
+      const pulse=pick?1+Math.sin(t*2+c)*.12:1;
+      g.strokeStyle=pick?`rgba(${CR},.95)`:`rgba(${CH},${inZone?.35:.18})`; g.lineWidth=1;
+      g.beginPath(); g.arc(cx,cy,(pick?7.5:6)*pulse,0,Math.PI*2); g.stroke();
+      for(let k=0;k<n;k++){g.fillStyle=pick?`rgba(${CR},1)`:`rgba(${CH},${inZone?.8:.4})`;g.beginPath();g.arc(cx+(k-(n-1)/2)*2.6,cy,1.1,0,Math.PI*2);g.fill()}
     }
   } else {
-    // beard: downward strands filling a jaw contour
-    g.strokeStyle=`rgba(${CH},.2)`; g.lineWidth=1; g.beginPath();
-    g.moveTo(14,14); g.quadraticCurveTo(w/2,h*1.35,w-14,14); g.stroke();
-    for(let i=0;i<190;i++){
-      const u=R(), x=18+u*(w-36), top=14+ (h*.2)*Math.pow(Math.abs(u-.5)*2,2);
-      const bottom=14+(h*1.35-14)*2*u*(1-u)*.92; if(bottom-top<6) continue;
-      const y=top+R()*(bottom-top), len=6+R()*8, a=Math.PI/2+(u-.5)*.8+Math.sin(t+i)*.04;
-      g.strokeStyle=`rgba(${R()<.06?CR:CH},${.35+R()*.5})`;
-      g.beginPath(); g.moveTo(x,y); g.lineTo(x+Math.cos(a)*len,y+Math.sin(a)*len); g.stroke();
+    // corrective: an old, pluggy straight line on the left refined into a soft natural hairline on the right
+    const mid=w/2, y0=h*.62;
+    for(let x=14;x<mid-18;x+=13){
+      for(let k=0;k<5;k++){
+        const xx=x+(k-2)*1.6, a=-Math.PI/2+(k-2)*.06;
+        g.strokeStyle=`rgba(${CH},.35)`; g.lineWidth=1.1;
+        g.beginPath(); g.moveTo(xx,y0); g.lineTo(xx+Math.cos(a)*16,y0+Math.sin(a)*16); g.stroke();
+      }
+    }
+    g.strokeStyle=`rgba(${CH},.3)`; g.setLineDash([2,4]); g.beginPath(); g.moveTo(14,y0+3); g.lineTo(mid-18,y0+3); g.stroke(); g.setLineDash([]);
+    const ax=mid+Math.sin(t*1.5)*2; g.strokeStyle=`rgba(${CR},.9)`; g.lineWidth=1.4;
+    g.beginPath(); g.moveTo(ax-10,y0-8); g.lineTo(ax+8,y0-8); g.moveTo(ax+3,y0-13); g.lineTo(ax+8,y0-8); g.lineTo(ax+3,y0-3); g.stroke();
+    for(let i=0;i<80;i++){
+      const u=R(), x=mid+18+u*(w-mid-32), base=y0-Math.sin(u*Math.PI)*h*.12+(R()-.5)*10;
+      const len=10+R()*14, a=-Math.PI/2+(u-.5)*.7+Math.sin(t+i)*.05;
+      g.strokeStyle=`rgba(${R()<.1?CR:CH},${.4+R()*.55})`; g.lineWidth=1;
+      g.beginPath(); g.moveTo(x,base); g.quadraticCurveTo(x+Math.cos(a)*len*.5+2,base+Math.sin(a)*len*.5,x+Math.cos(a)*len,base+Math.sin(a)*len); g.stroke();
     }
   }
 }

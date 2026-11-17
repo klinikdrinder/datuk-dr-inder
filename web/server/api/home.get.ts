@@ -14,7 +14,7 @@ export default defineEventHandler(async () => {
     cmsGet('/awards', { populate: ['certificate_image'], sort: ['order:asc', 'year:asc'], pagination: { pageSize: 100 } }),
     cmsGet('/press-features', { populate: ['image', 'pages'], sort: ['order:asc', 'date:desc'], pagination: { pageSize: 60 } }),
     cmsGet('/publications', { populate: ['pdf', 'cover'], sort: ['published_on:desc'], pagination: { pageSize: 10 } }),
-    cmsGet('/website/instagram'),
+    cmsGet('/website/instagram', {}, { optional: true }),
     cmsGet('/seminars', { populate: ['poster'], filters: { starts_at: { $gte: nowIso } }, sort: ['starts_at:asc'], pagination: { pageSize: 4 } }),
     cmsGet('/articles', { populate: ['cover', 'category'], sort: ['publishedAt:desc'], pagination: { pageSize: 3 } }),
     cmsGet('/events', { populate: { photos: true, seminar: { fields: ['slug', 'title'] } }, sort: ['date:desc', 'id:desc'], pagination: { pageSize: 3 } }),
