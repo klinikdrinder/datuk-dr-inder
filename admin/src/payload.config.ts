@@ -20,7 +20,7 @@ import { revalidateAfterChange, revalidateAfterDelete, revalidateGlobal } from '
 import type { CollectionConfig, GlobalConfig } from 'payload'
 
 // Saving these refreshes the website's cached pages straight away.
-const ON_SITE = new Set(['events', 'seminars', 'articles', 'categories', 'awards', 'certificates', 'recognition-logos', 'press-features', 'publications'])
+const ON_SITE = new Set(['events', 'seminars', 'articles', 'categories', 'awards', 'certificates', 'recognition-logos', 'press-features', 'publications', 'media', 'instagram-posts'])
 const withRevalidate = (c: CollectionConfig): CollectionConfig =>
   ON_SITE.has(c.slug)
     ? { ...c, hooks: { ...c.hooks, afterChange: [...(c.hooks?.afterChange || []), revalidateAfterChange], afterDelete: [...(c.hooks?.afterDelete || []), revalidateAfterDelete] } }

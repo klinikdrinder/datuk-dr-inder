@@ -33,12 +33,13 @@ export default defineNuxtConfig({
   // Pages are cached on Vercel's CDN. The admin refreshes them the moment something is saved
   // (server/api/revalidate.post.ts); the timers below are only a safety net.
   routeRules: {
-    '/': { isr: 600 },
-    '/events': { isr: 600 },
-    '/seminars': { isr: 600 },
-    '/seminars/**': { isr: 600 },
-    '/journal': { isr: { expiration: 600, allowQuery: ['page', 'category'] } },
-    '/journal/**': { isr: 600 },
+    // Saves in the admin refresh these instantly; the timer is only a safety net (e.g. journal page 2, 3…).
+    '/': { isr: 300 },
+    '/events': { isr: 300 },
+    '/seminars': { isr: 300 },
+    '/seminars/**': { isr: 300 },
+    '/journal': { isr: { expiration: 300, allowQuery: ['page', 'category'] } },
+    '/journal/**': { isr: 300 },
     '/privacy': { isr: 86400 },
   },
 
