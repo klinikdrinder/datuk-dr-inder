@@ -4,6 +4,13 @@ import { isEditor, loggedIn, publishedOrStaff } from '../lib/access'
 import { draftRules } from '../lib/hooks'
 import { publishAtField, publishedAtField, slugField } from '../lib/fields'
 
+/** An end date can't be before the start date (catches typos like 2023 instead of 2025). */
+const endAfter = (startField: string) => (value: unknown, { siblingData }: { siblingData: Record<string, any> }) => {
+  const start = siblingData?.[startField]
+  if (!value || !start) return true
+  return new Date(value as string).getTime() >= new Date(start).getTime() || 'The end date is before the start date. Please check both years.'
+}
+
 const versions = { drafts: { autosave: false }, maxPerDoc: 20 }
 const access = { read: publishedOrStaff, create: loggedIn, update: loggedIn, delete: isEditor, readVersions: loggedIn }
 
@@ -57,7 +64,7 @@ export const Seminars: CollectionConfig = {
       type: 'row',
       fields: [
         { name: 'starts_at', type: 'date', required: true, admin: { date: { pickerAppearance: 'dayAndTime' } } },
-        { name: 'ends_at', type: 'date', admin: { date: { pickerAppearance: 'dayAndTime' } } },
+        { name: 'ends_at', type: 'date', validate: endAfter('starts_at'), admin: { date: { pickerAppearance: 'dayAndTime' } } },
       ],
     },
     { name: 'venue', type: 'text' },
@@ -116,7 +123,7 @@ export const Events: CollectionConfig = {
       type: 'row',
       fields: [
         { name: 'date', type: 'date', required: true, admin: { date: { pickerAppearance: 'dayOnly', displayFormat: 'd MMM yyyy' } } },
-        { name: 'end_date', type: 'date', admin: { date: { pickerAppearance: 'dayOnly', displayFormat: 'd MMM yyyy' }, description: 'For multi-day events.' } },
+        { name: 'end_date', type: 'date', validate: endAfter('date'), admin: { date: { pickerAppearance: 'dayOnly', displayFormat: 'd MMM yyyy' }, description: 'For multi-day events.' } },
       ],
     },
     {
