@@ -62,8 +62,9 @@ export default buildConfig({
       // Supabase: encrypted and verified against Supabase's own root certificate.
       ...(/supabase\.(com|co)/.test(process.env.DATABASE_URL || '') ? { ssl: { ca: SUPABASE_CA, rejectUnauthorized: true } } : {}),
       // Each Vercel function gets its own pool; keep it small so the Supabase pooler isn't exhausted.
-      max: process.env.VERCEL ? 4 : 10,
-      idleTimeoutMillis: process.env.VERCEL ? 10_000 : 30_000,
+      max: process.env.VERCEL ? 3 : 10,
+      // close idle connections quickly so paused function instances don't keep pooler slots
+      idleTimeoutMillis: process.env.VERCEL ? 3_000 : 30_000,
     },
     migrationDir: path.resolve(dirname, 'migrations'),
     prodMigrations: migrations,

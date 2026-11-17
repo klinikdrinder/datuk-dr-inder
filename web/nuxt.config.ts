@@ -34,12 +34,14 @@ export default defineNuxtConfig({
   // (server/api/revalidate.post.ts); the timers below are only a safety net.
   routeRules: {
     // Saves in the admin refresh these instantly; the timer is only a safety net (e.g. journal page 2, 3…).
-    '/': { isr: 300 },
-    '/events': { isr: 300 },
-    '/seminars': { isr: 300 },
-    '/seminars/**': { isr: 300 },
+    // allowQuery: [] = a random "?x=…" in the address can't skip the cache and make the page rebuild
+    // (each rebuild calls the admin ~12 times, so a flood of those exhausted the database connections).
+    '/': { isr: { expiration: 300, allowQuery: [] } },
+    '/events': { isr: { expiration: 300, allowQuery: [] } },
+    '/seminars': { isr: { expiration: 300, allowQuery: [] } },
+    '/seminars/**': { isr: { expiration: 300, allowQuery: [] } },
     '/journal': { isr: { expiration: 300, allowQuery: ['page', 'category'] } },
-    '/journal/**': { isr: 300 },
+    '/journal/**': { isr: { expiration: 300, allowQuery: [] } },
     '/privacy': { isr: 86400 },
   },
 
