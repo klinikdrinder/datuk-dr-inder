@@ -41,7 +41,6 @@ useHead({
     <PhilosophySection :quote="d.home.philosophy_quote" />
     <CredentialsSection :home="d.home" :certificates="d.certificates" />
     <ExpertiseSection :home="d.home" />
-    <LeadershipSection :home="d.home" />
     <AwardsSection :home="d.home" :awards="d.awards" />
     <PublicationSection :publications="d.publications" />
     <ClinicSection :home="d.home" :site="d.site" />
