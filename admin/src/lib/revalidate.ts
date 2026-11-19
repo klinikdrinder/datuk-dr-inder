@@ -45,7 +45,7 @@ async function pagesFor(collection: string, doc: any, payload: Payload): Promise
     case 'categories':
       return ['/journal']
     case 'seminars':
-      return ['/seminars', ...(doc?.slug ? [`/seminars/${doc.slug}`] : [])]
+      return ['/events', ...(doc?.slug ? [`/seminars/${doc.slug}`] : [])]
     case 'events': {
       const out = ['/events']
       const s = doc?.seminar
@@ -59,7 +59,7 @@ async function pagesFor(collection: string, doc: any, payload: Payload): Promise
       return out
     }
     case 'media': // a replaced photo can appear on any page
-      return ['/events', '/seminars', '/journal']
+      return ['/events', '/journal']
     default:
       return []
   }
@@ -88,6 +88,6 @@ export const revalidateAfterDelete: CollectionAfterDeleteHook = async ({ doc, co
 }
 
 export const revalidateGlobal: GlobalAfterChangeHook = async ({ doc, req, context }) => {
-  if (!context?.skipRevalidate) later(() => revalidateWebsite(['/events', '/seminars', '/journal'], req.payload), req.payload)
+  if (!context?.skipRevalidate) later(() => revalidateWebsite(['/events', '/journal'], req.payload), req.payload)
   return doc
 }

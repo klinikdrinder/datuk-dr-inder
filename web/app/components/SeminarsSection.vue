@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{ seminars: any[]; site: any }>()
+const props = defineProps<{ seminars: any[]; site: any; embedded?: boolean }>()
 const next = computed(() => props.seminars[0])
 const rest = computed(() => props.seminars.slice(1, 4))
 const left = ref({ d: 0, h: 0, m: 0 })
@@ -13,11 +13,12 @@ onMounted(() => { tick(); t = setInterval(tick, 30000) })
 onBeforeUnmount(() => clearInterval(t))
 </script>
 <template>
-  <section id="seminars" class="sec">
+  <section id="seminars" class="sec" :class="{ 'sem-embedded': embedded }">
     <div class="wrap">
-      <div v-reveal class="sec-head rv">
+      <h2 v-if="embedded" class="eyebrow" style="margin-bottom:28px">Upcoming seminar</h2>
+      <div v-else v-reveal class="sec-head rv">
         <div><div class="eyebrow">Seminars &amp; talks</div><h2 class="h2" style="margin-top:22px">Learn from Datuk Dr Inder <span class="accent">in person</span></h2></div>
-        <NuxtLink class="btn btn-ghost" to="/seminars">All seminars</NuxtLink>
+        <NuxtLink class="btn btn-ghost" to="/events">Seminars &amp; events</NuxtLink>
       </div>
       <article v-if="next" v-reveal class="sem-feature rv">
         <NuxtLink :to="`/seminars/${next.slug}`" class="sem-poster" :aria-label="next.title">
@@ -47,7 +48,7 @@ onBeforeUnmount(() => clearInterval(t))
           <p class="sum">Datuk Dr Inder holds talks on hair loss and hair restoration every few months. Follow her on Instagram or WhatsApp the clinic to be told when registration opens.</p>
           <div class="ctas" style="margin-top:22px">
             <a class="btn btn-red" :href="waLink(site.whatsapp_number, 'Hello, please tell me about the next seminar by Datuk Dr Inder.')" target="_blank" rel="noopener">Notify me on WhatsApp</a>
-            <NuxtLink class="btn btn-ghost" to="/seminars">Past seminars</NuxtLink>
+            <NuxtLink class="btn btn-ghost" :to="embedded ? '#gallery' : '/events#gallery'">Past seminars &amp; events</NuxtLink>
           </div>
         </div>
       </div>

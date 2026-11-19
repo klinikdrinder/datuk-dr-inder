@@ -315,3 +315,6 @@
 
 @media (max-width:1000px){.ev-grid,.ev-grid-even{grid-template-columns:repeat(2,minmax(0,1fr))}.ev-card.big{grid-column:1/-1;grid-row:auto;min-height:420px}}
 @media (max-width:600px){.ev-grid,.ev-grid-even,.ev-grid.n2{grid-template-columns:minmax(0,1fr)}.ev-card{min-height:280px}.ev-card.big{min-height:380px}}
+
+/* seminars block on the combined Seminars & events page sits right under the page title */
+.sem-embedded{border-top:0;padding-top:20px}

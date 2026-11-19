@@ -33,7 +33,7 @@ async function submit() {
   <div v-if="s">
     <section class="page-hero">
       <div class="wrap">
-        <div class="crumbs"><NuxtLink to="/">Home</NuxtLink> / <NuxtLink to="/seminars">Seminars</NuxtLink></div>
+        <div class="crumbs"><NuxtLink to="/">Home</NuxtLink> / <NuxtLink to="/events">Seminars &amp; events</NuxtLink></div>
         <div class="sem-date" style="margin-top:12px">
           <div class="d"><b>{{ fmtDay(s.starts_at) }}</b><span>{{ fmtMon(s.starts_at) }}</span></div>
           <div class="t"><b>{{ fmtWeekday(s.starts_at) }}, {{ fmtTime(s.starts_at) }}<template v-if="s.ends_at"> – {{ fmtTime(s.ends_at) }}</template></b>{{ s.is_online ? 'Online' : s.venue }}</div>
@@ -54,7 +54,7 @@ async function submit() {
           </template>
         </div>
         <aside id="register" class="side-card">
-          <template v-if="past"><h4>This seminar has ended</h4><p>See upcoming seminars, or WhatsApp us to hear about the next one.</p><NuxtLink class="btn btn-red" to="/seminars">Upcoming seminars</NuxtLink></template>
+          <template v-if="past"><h4>This seminar has ended</h4><p>See upcoming seminars, or WhatsApp us to hear about the next one.</p><NuxtLink class="btn btn-red" to="/events#seminars">Upcoming seminars</NuxtLink></template>
           <template v-else-if="s.mode === 'whatsapp'"><h4>Reserve your seat</h4><p>Registration for this seminar is by WhatsApp.</p><a class="btn btn-red" :href="waLink(site.whatsapp_number, `Hello, I would like to register for: ${s.title} (${fmtDate(s.starts_at)}).`)" target="_blank" rel="noopener">Register on WhatsApp</a></template>
           <template v-else-if="s.mode === 'external' && s.external_url"><h4>Reserve your seat</h4><p>Registration is handled on the organiser’s website.</p><a class="btn btn-red" :href="s.external_url" target="_blank" rel="noopener">Register ↗</a></template>
           <template v-else-if="s.mode === 'closed'"><h4>Registration closed</h4><p>Registration for this seminar is closed.</p></template>

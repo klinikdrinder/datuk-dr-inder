@@ -27,7 +27,7 @@ const handle = computed(() => props.home?.instagram_handle || 'datukdrinder')
           <h3>Event photos are on their way</h3>
           <p>Highlights from Datuk Dr Inder’s seminars, international congresses and award nights will appear here shortly.</p>
           <div class="ctas">
-            <NuxtLink class="btn btn-red" to="/seminars">Upcoming seminars</NuxtLink>
+            <NuxtLink class="btn btn-red" to="/events#seminars">Upcoming seminars</NuxtLink>
             <a class="btn btn-ghost" :href="`https://www.instagram.com/${handle}/`" target="_blank" rel="noopener">Follow on Instagram ↗</a>
           </div>
         </div>

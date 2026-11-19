@@ -38,7 +38,8 @@ export default defineNuxtConfig({
     // (each rebuild calls the admin ~12 times, so a flood of those exhausted the database connections).
     '/': { isr: { expiration: 300, allowQuery: [] } },
     '/events': { isr: { expiration: 300, allowQuery: [] } },
-    '/seminars': { isr: { expiration: 300, allowQuery: [] } },
+    // seminars and events share one page now; old /seminars links forward there
+    '/seminars': { redirect: { to: '/events', statusCode: 301 } },
     '/seminars/**': { isr: { expiration: 300, allowQuery: [] } },
     '/journal': { isr: { expiration: 300, allowQuery: ['page', 'category'] } },
     '/journal/**': { isr: { expiration: 300, allowQuery: [] } },
