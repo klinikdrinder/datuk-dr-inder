@@ -24,7 +24,7 @@ onMounted(() => {
     let x = 0, y = 0, cx = 0, cy = 0
     window.addEventListener('pointermove', (e) => { x = e.clientX; y = e.clientY; cur.value!.style.opacity = '1' })
     document.addEventListener('pointerover', (e) => {
-      const t = (e.target as HTMLElement)?.closest?.('a,button,.card,.ring-stage,.g-item,.ig-post')
+      const t = (e.target as HTMLElement)?.closest?.('a,button,.card,.aw-card,.g-item,.ig-post')
       cur.value?.classList.toggle('big', !!t)
     })
     const loop = () => { cx += (x - cx) * 0.18; cy += (y - cy) * 0.18; if (cur.value) cur.value.style.transform = `translate(${cx}px,${cy}px)`; raf = requestAnimationFrame(loop) }

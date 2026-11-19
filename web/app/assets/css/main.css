@@ -235,25 +235,9 @@ section{position:relative}
 .timeline h3{font-size:22px;line-height:1.25;margin-top:8px}
 .timeline p{color:var(--smoke);font-size:14.5px;margin-top:6px}
 
-/* AWARDS RING */
-.ring-stage{position:relative;height:440px;perspective:1700px;overflow:hidden;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none;margin-inline:calc(var(--gut) * -1)}
-.ring-stage:active{cursor:grabbing}
-.ring-stage::before,.ring-stage::after{content:"";position:absolute;top:0;bottom:0;width:18%;z-index:3;pointer-events:none}
-.ring-stage::before{left:0;background:linear-gradient(90deg,var(--black),transparent)}
-.ring-stage::after{right:0;background:linear-gradient(-90deg,var(--black),transparent)}
-.ring{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
-.award{position:absolute;width:232px;height:300px;left:-116px;top:-150px;padding:24px 22px;border-radius:20px;border:1px solid var(--hairline);background:linear-gradient(165deg,var(--card-a),var(--card-b) 80%);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;transition:border-color .5s,box-shadow .5s}
-.award.front{border-color:rgba(var(--gold),.55);box-shadow:0 30px 80px -20px rgba(200,16,46,.45)}
-.award .yr{font:300 46px/1 var(--serif);color:var(--ivory);font-variant-numeric:tabular-nums}
-.award .yr small{font-size:15px;color:var(--faint);font-style:italic}
-.award .laurel{width:34px;height:34px;margin-bottom:14px;color:var(--champagne)}
-.award h3{font-size:18px;line-height:1.3;margin-top:16px}
-.award .by{margin-top:auto;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--champagne);line-height:1.5}
-.ring-ctrl{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:26px}
 .icon-btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--ivory);display:grid;place-items:center;cursor:pointer;transition:border-color .3s,background .3s}
 .icon-btn:hover{border-color:var(--crimson);background:rgba(200,16,46,.12)}
 .icon-btn svg{width:18px;height:18px}
-.ring-count{font:italic 400 17px/1 var(--serif);color:var(--smoke);min-width:80px;text-align:center;font-variant-numeric:tabular-nums}
 
 /* CLINIC */
 .clinic{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(36px,5vw,72px);align-items:start}
@@ -342,8 +326,6 @@ footer .disc{max-width:62ch}
   .mbar{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:55;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(var(--bg),.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--hairline)}
   .mbar .btn{justify-content:center;padding:14px 12px}
   body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
-  .ring-stage{height:400px}
-  .award{width:200px;height:280px;left:-100px;top:-140px}
 }
 @media (max-width:560px){
   .cards{grid-template-columns:minmax(0,1fr)}
@@ -360,7 +342,6 @@ footer .disc{max-width:62ch}
 }
 
 .nav-r{display:flex;align-items:center;gap:10px}
-.award.front{box-shadow:0 30px 70px -25px rgba(200,16,46,.3)}
 .float-card{box-shadow:0 10px 30px -12px rgba(22,17,18,.18)}
 
 /* Hero: "Signature approach" banner, centred over the bottom of the photo */
