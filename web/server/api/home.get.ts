@@ -7,7 +7,7 @@ const img = (url: string, alt: string) => ({ url, full: url, alt, caption: '', w
 export default defineEventHandler(async () => {
   const [site, home, logos, certs, awards, press, pubs, ig, articles, events] = await Promise.all([
     cmsGet('/site-setting', { populate: ['hero_photo', 'og_image', 'story_video', 'lcp_certificate'] }),
-    cmsGet('/home-content', { populate: ['expertise_photos', 'leadership_photos', 'award_photos'] }),
+    cmsGet('/home-content', { populate: ['expertise_photos', 'leadership_photos', 'award_photos', 'press_photos'] }),
     cmsGet('/recognition-logos', { populate: ['logo'], sort: ['order:asc', 'id:asc'], pagination: { pageSize: 60 } }),
     cmsGet('/certificates', { populate: ['image'], sort: ['order:asc', 'id:asc'], pagination: { pageSize: 60 } }),
     cmsGet('/awards', { populate: ['certificate_image'], sort: ['order:asc', 'year:asc'], pagination: { pageSize: 100 } }),
@@ -57,7 +57,12 @@ export default defineEventHandler(async () => {
       const image = media(p.image, 'medium') || media(p.pages?.[0], 'medium')
       const all = [p.image, ...(p.pages || [])].filter(Boolean)
       return { publication: p.publication, headline: p.headline, date: p.date, link: p.link, image, pages: all.map((m: any) => media(m)) }
-    }).filter((p: any) => p.image),
+    }).filter((p: any) => p.image).concat(
+      // plain scans uploaded under Page sections → Magazines (no details)
+      (home?.data?.press_photos || []).filter((m: any) => m && typeof m === 'object').map((m: any) => ({
+        publication: '', headline: '', date: '', link: '', image: media(m, 'medium'), pages: [media(m)],
+      })).filter((p: any) => p.image),
+    ),
     publications: (list(pubs).length ? list(pubs) : defaults.publications).map((p: any) => ({
       title: p.title, authors: p.authors, journal: p.journal, citation: p.citation, abstract: p.abstract, link: p.link,
       published_on: p.published_on, pdf: media(p.pdf), cover: media(p.cover, 'medium'),

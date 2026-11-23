@@ -6,7 +6,7 @@ const showAll = ref(false)
 const shown = computed(() => (showAll.value ? props.press : props.press.slice(0, LIMIT)))
 const year = (d?: string) => String(d || '').slice(0, 4)
 const since = computed(() => props.press.map((p) => year(p.date)).filter(Boolean).sort()[0] || '')
-const label = (p: any) => [p.publication, p.headline, year(p.date)].filter(Boolean).join(' · ')
+const label = (p: any) => [p.publication, p.headline, year(p.date)].filter(Boolean).join(' · ') || 'Magazine feature on Datuk Dr Inder'
 // open every page of one clipping in the viewer
 function read(p: any) {
   const pages = (p.pages?.length ? p.pages : [p.image]).map((m: any, i: number, a: any[]) => ({
@@ -28,11 +28,11 @@ function read(p: any) {
       <div class="mag-wall">
         <figure v-for="(p, i) in shown" :key="i" class="mag">
           <button type="button" class="mag-paper" :aria-label="`Read: ${label(p)}`" @click="read(p)">
-            <img :src="p.image.url" :alt="p.image.alt || `${p.publication} feature on Datuk Dr Inder`" loading="lazy" decoding="async">
+            <img :src="p.image.url" :alt="p.image.alt || label(p)" loading="lazy" decoding="async">
             <span v-if="p.pages?.length > 1" class="mag-pages">{{ p.pages.length }} pages</span>
             <span class="mag-read" aria-hidden="true">Read</span>
           </button>
-          <figcaption>
+          <figcaption v-if="p.publication || p.headline || year(p.date) || p.link">
             <b>{{ p.publication }}</b>
             <span v-if="p.headline" class="h">{{ p.headline }}</span>
             <span class="y"><template v-if="year(p.date)">{{ year(p.date) }}</template><a v-if="p.link" :href="p.link" target="_blank" rel="noopener">Read online ↗</a></span>

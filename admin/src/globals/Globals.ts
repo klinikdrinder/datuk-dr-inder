@@ -161,6 +161,14 @@ export const HomeContent: GlobalConfig = {
           label: 'Magazines & Instagram',
           fields: [
             { name: 'press_title', type: 'text', defaultValue: 'As featured in *the press*', admin: { description: `Heading of "Datuk Dr Inder in magazines". ${tip}` } },
+            {
+              name: 'press_photos',
+              label: 'Magazine photos',
+              type: 'upload',
+              relationTo: 'media',
+              hasMany: true,
+              admin: { description: 'Just upload the magazine/newspaper scans (you can select many at once) and Save. They show in "Datuk Dr Inder in magazines" in this order; drag to reorder. No details needed.' },
+            },
             { name: 'instagram_title', type: 'text', defaultValue: 'Follow her *work*', admin: { description: tip } },
             { name: 'instagram_handle', type: 'text', defaultValue: 'datukdrinder' },
           ],
