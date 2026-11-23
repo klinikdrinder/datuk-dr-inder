@@ -1,18 +1,11 @@
 <script setup lang="ts">
-const [{ data }, { data: sem }, { data: home }] = await Promise.all([
-  useFetch('/api/events'), useFetch('/api/seminars'), useFetch('/api/home', { key: 'home' }),
-])
+const { data } = await useFetch('/api/events')
 useSeoMeta({
-  title: 'Seminars & events | Datuk Dr Inder',
-  description: 'Upcoming hair loss and hair restoration seminars by Datuk Dr Inderjit Kaur in Petaling Jaya, plus photos from past seminars, international congresses, awards and media events.',
+  title: 'Events | Datuk Dr Inder',
+  description: 'International hair restoration congresses, scientific meetings, award nights and media appearances attended by Datuk Dr Inderjit Kaur, with photos from each event.',
 })
 const all = computed(() => data.value?.events || [])
 const { active, options, filtered } = useEventFilters(all)
-// past seminars that already have a photo album above aren't listed twice
-const pastSems = computed(() => {
-  const shown = new Set(all.value.map((e: any) => e.seminar?.slug).filter(Boolean))
-  return (sem.value?.past || []).filter((s: any) => !shown.has(s.slug))
-})
 const byYear = computed(() => {
   const groups: { year: string; items: any[] }[] = []
   for (const e of filtered.value) {
@@ -27,16 +20,14 @@ const byYear = computed(() => {
   <div>
     <section class="page-hero">
       <div class="wrap">
-        <div class="crumbs"><NuxtLink to="/">Home</NuxtLink> / Seminars &amp; events</div>
-        <div class="eyebrow">Seminars &amp; events</div>
-        <h1>Learn in person, <span class="accent">on the world stage</span></h1>
-        <p class="lede">Reserve a seat at the next talk on hair loss and hair restoration, and browse photos from past seminars, international congresses, awards and media appearances.</p>
+        <div class="crumbs"><NuxtLink to="/">Home</NuxtLink> / Events</div>
+        <div class="eyebrow">Events</div>
+        <h1>On the <span class="accent">world</span> stage</h1>
+        <p class="lede">International congresses, scientific meetings, award nights and media appearances. Select an event to see its details and photos.</p>
       </div>
     </section>
-    <SeminarsSection :seminars="sem?.upcoming || []" :site="home?.site || {}" embedded />
-    <section id="gallery" class="sec">
+    <section class="sec" style="border-top:0;padding-top:20px">
       <div class="wrap">
-        <h2 class="eyebrow" style="margin-bottom:28px">Event photos</h2>
         <template v-if="all.length">
           <div class="ev-counts">
             <div><b>{{ data!.stats.total }}</b><span>Events{{ data!.stats.since ? ` since ${data!.stats.since}` : '' }}</span></div>
@@ -54,18 +45,6 @@ const byYear = computed(() => {
           </div>
         </template>
         <p v-else class="lede">Event photos will appear here soon.</p>
-      </div>
-    </section>
-    <section v-if="pastSems.length" id="past-seminars" class="sec alt">
-      <div class="wrap">
-        <h2 class="eyebrow">Past seminars</h2>
-        <div class="sem-list">
-          <NuxtLink v-for="s in pastSems" :key="s.slug" class="sem-card" :to="`/seminars/${s.slug}`">
-            <span class="badge-past">Past</span>
-            <span class="when">{{ fmtDate(s.starts_at) }}</span>
-            <h4>{{ s.title }}</h4><p>{{ s.is_online ? 'Online' : s.venue }}</p>
-          </NuxtLink>
-        </div>
       </div>
     </section>
   </div>

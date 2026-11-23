@@ -30,13 +30,13 @@ const more = computed(() => Math.max(0, (props.ev.photo_count || 0) - tiles.valu
         <span v-if="ev.international" class="evc-tag">International</span>
         <span v-if="ev.highlight" class="evc-tag">{{ ev.highlight }}</span>
       </div>
-      <h3 class="evc-title">{{ ev.title }}</h3>
+      <h3 class="evc-title"><NuxtLink :to="ev.path">{{ ev.title }}</NuxtLink></h3>
       <p class="evc-sub">
         <span v-if="place"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.4" /></svg>{{ place }}</span>
         <span v-if="when"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2" /><path d="M3.5 10h17M8 3v4M16 3v4" /></svg>{{ when }}</span>
       </p>
       <p v-if="ev.summary" class="evc-sum">{{ ev.summary }}</p>
-      <button type="button" class="evc-link" @click="openEvent(ev, 0)">View all {{ ev.photo_count }} photo{{ ev.photo_count === 1 ? '' : 's' }} →</button>
+      <NuxtLink class="evc-link" :to="ev.path">Event details &amp; {{ ev.photo_count }} photo{{ ev.photo_count === 1 ? '' : 's' }} →</NuxtLink>
     </div>
   </article>
 </template>

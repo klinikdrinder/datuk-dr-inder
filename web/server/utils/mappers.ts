@@ -1,16 +1,20 @@
 import { media } from './cms'
 
 /** Event as a card: cover photo (the first photo) and a count; the full photo set is fetched on click. */
+/** Website address of an event page, e.g. /events/4-ishrs-world-congress-in-berlin (must match admin/src/lib/revalidate.ts). */
+export const eventPath = (e: { id: any; title?: string }) => {
+  const words = String(e.title || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80).replace(/-+$/, '')
+  return `/events/${e.id}${words ? `-${words}` : ''}`
+}
 export function mapEventCard(x: any) {
   const photos = Array.isArray(x.photos) ? x.photos : []
   const country = (x.country || '').trim()
   return {
-    id: x.documentId, title: x.title, date: x.date, end_date: x.end_date, city: x.city || '', country,
+    id: x.documentId, path: eventPath({ id: x.id ?? x.documentId, title: x.title }), title: x.title, date: x.date, end_date: x.end_date, city: x.city || '', country,
     international: !!country && !/^malaysia$/i.test(country), role: x.role || '', highlight: x.highlight || '',
     summary: x.summary || '', cover: media(photos[0], 'large'), photo_count: photos.length,
     // up to 5 photos for the homepage collage (first one larger)
     preview: photos.slice(0, 5).map((m: any, i: number) => media(m, i === 0 ? 'large' : 'medium')),
-    seminar: x.seminar?.slug ? { slug: x.seminar.slug, title: x.seminar.title } : null,
   }
 }
 export function mapEventPhotos(x: any) {
@@ -27,13 +31,6 @@ export function eventStats(rows: any[]) {
   return { total: rows.length, countries: countries.size, this_year: years.filter((y) => y === year).length, since: years.length ? years.sort()[0] : null }
 }
 
-export function mapSeminar(x: any) {
-  return {
-    title: x.title, slug: x.slug, starts_at: x.starts_at, ends_at: x.ends_at, venue: x.venue, is_online: x.is_online,
-    summary: x.summary, description: x.description || [], poster: media(x.poster, 'large'), fee: x.fee,
-    capacity: x.capacity, mode: x.registration_mode, external_url: x.external_url,
-  }
-}
 export function mapArticle(x: any) {
   return {
     title: x.title, slug: x.slug, excerpt: x.excerpt, cover: media(x.cover, 'large'), body: x.body || [],

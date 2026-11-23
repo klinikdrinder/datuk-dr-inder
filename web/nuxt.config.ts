@@ -38,9 +38,10 @@ export default defineNuxtConfig({
     // (each rebuild calls the admin ~12 times, so a flood of those exhausted the database connections).
     '/': { isr: { expiration: 300, allowQuery: [] } },
     '/events': { isr: { expiration: 300, allowQuery: [] } },
-    // seminars and events share one page now; old /seminars links forward there
+    '/events/**': { isr: { expiration: 300, allowQuery: [] } },
+    // Datuk Dr Inder doesn't run her own seminars; old seminar links forward to Events
     '/seminars': { redirect: { to: '/events', statusCode: 301 } },
-    '/seminars/**': { isr: { expiration: 300, allowQuery: [] } },
+    '/seminars/**': { redirect: { to: '/events', statusCode: 301 } },
     '/journal': { isr: { expiration: 300, allowQuery: ['page', 'category'] } },
     '/journal/**': { isr: { expiration: 300, allowQuery: [] } },
     '/privacy': { isr: 86400 },

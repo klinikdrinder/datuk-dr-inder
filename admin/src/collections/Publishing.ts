@@ -49,7 +49,9 @@ export const Articles: CollectionConfig = {
 export const Seminars: CollectionConfig = {
   slug: 'seminars',
   admin: {
-    group: 'Seminars & events',
+    group: 'Events',
+    // Datuk Dr Inder doesn't run her own seminars, so this is hidden from the menu (data kept).
+    hidden: true,
     useAsTitle: 'title',
     defaultColumns: ['title', 'starts_at', 'registration_mode', '_status'],
     description: 'The next seminar shows on the homepage with a countdown. After the date it moves to Past seminars.',
@@ -108,10 +110,10 @@ export const Events: CollectionConfig = {
   slug: 'events',
   labels: { singular: 'Event', plural: 'Events & photos' },
   admin: {
-    group: 'Seminars & events',
+    group: 'Events',
     useAsTitle: 'title',
     defaultColumns: ['title', 'date', 'city', 'country', '_status'],
-    description: 'After every seminar, congress, award night or media appearance. The newest 3 show on the homepage.',
+    description: 'Congresses, meetings, award nights and media appearances. Each event gets its own page on the website; the newest 3 also show on the homepage.',
   },
   access,
   versions,
@@ -136,11 +138,16 @@ export const Events: CollectionConfig = {
     {
       type: 'row',
       fields: [
-        { name: 'role', type: 'select', required: true, defaultValue: 'Speaker', options: ['Speaker', 'Faculty', 'Organiser', 'Award', 'Guest', 'Media', 'Attendee'] },
+        { name: 'role', type: 'select', required: true, defaultValue: 'Attendee', options: ['Speaker', 'Faculty', 'Organiser', 'Award', 'Guest', 'Media', 'Attendee'] },
         { name: 'highlight', type: 'text', maxLength: 30, admin: { description: 'Optional short tag, e.g. Live surgery' } },
       ],
     },
-    { name: 'summary', type: 'textarea', maxLength: 300 },
+    { name: 'summary', type: 'textarea', maxLength: 300, admin: { description: 'One or two sentences, shown on the event card and at the top of its page.' } },
+    {
+      name: 'details',
+      type: 'richText',
+      admin: { description: 'Optional: more about the event (what it was, sessions attended, what Datuk Dr Inder learned). Shown on the event page.' },
+    },
     {
       name: 'photos',
       type: 'upload',
@@ -153,7 +160,7 @@ export const Events: CollectionConfig = {
       name: 'seminar',
       type: 'relationship',
       relationTo: 'seminars',
-      admin: { position: 'sidebar', description: 'Optional: link one of the doctor’s own seminars — the photos also appear on its page.' },
+      admin: { position: 'sidebar', hidden: true },
     },
     publishedAtField,
   ],

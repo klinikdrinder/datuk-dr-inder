@@ -4,7 +4,7 @@ import crypto from 'crypto'
  * Called by the admin right after something is saved: rebuilds the cached (ISR) pages on Vercel
  * so changes show within seconds. Protected by REVALIDATE_SECRET (same value in the admin).
  */
-const ALLOWED = /^\/(|events|seminars|journal|seminars\/[a-z0-9-]{1,140}|journal\/[a-z0-9-]{1,140})$/
+const ALLOWED = /^\/(|events|journal|events\/[a-z0-9-]{1,140}|journal\/[a-z0-9-]{1,140})$/
 
 function same(a: string, b: string) {
   if (a.length < 16) return false

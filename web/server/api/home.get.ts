@@ -5,8 +5,7 @@ const filled = (o: any) => Object.fromEntries(Object.entries(o || {}).filter(([,
 const img = (url: string, alt: string) => ({ url, full: url, alt, caption: '', width: null, height: null, mime: 'image/webp' })
 
 export default defineEventHandler(async () => {
-  const nowIso = new Date().toISOString()
-  const [site, home, logos, certs, awards, press, pubs, ig, upcoming, articles, events] = await Promise.all([
+  const [site, home, logos, certs, awards, press, pubs, ig, articles, events] = await Promise.all([
     cmsGet('/site-setting', { populate: ['hero_photo', 'og_image', 'story_video', 'lcp_certificate'] }),
     cmsGet('/home-content', { populate: ['expertise_photos', 'leadership_photos', 'award_photos'] }),
     cmsGet('/recognition-logos', { populate: ['logo'], sort: ['order:asc', 'id:asc'], pagination: { pageSize: 60 } }),
@@ -15,9 +14,8 @@ export default defineEventHandler(async () => {
     cmsGet('/press-features', { populate: ['image', 'pages'], sort: ['order:asc', 'date:desc'], pagination: { pageSize: 60 } }),
     cmsGet('/publications', { populate: ['pdf', 'cover'], sort: ['published_on:desc'], pagination: { pageSize: 10 } }),
     cmsGet('/website/instagram', {}, { optional: true }),
-    cmsGet('/seminars', { populate: ['poster'], filters: { starts_at: { $gte: nowIso } }, sort: ['starts_at:asc'], pagination: { pageSize: 4 } }),
     cmsGet('/articles', { populate: ['cover', 'category'], sort: ['publishedAt:desc'], pagination: { pageSize: 3 } }),
-    cmsGet('/events', { populate: { photos: true, seminar: { fields: ['slug', 'title'] } }, sort: ['date:desc', 'id:desc'], pagination: { pageSize: 3 } }),
+    cmsGet('/events', { populate: ['photos'], sort: ['date:desc', 'id:desc'], pagination: { pageSize: 3 } }),
   ])
   const cmsOnline = !!(site || home)
   const s = { ...defaults.site, ...filled(site?.data) }
@@ -65,7 +63,6 @@ export default defineEventHandler(async () => {
       published_on: p.published_on, pdf: media(p.pdf), cover: media(p.cover, 'medium'),
     })),
     instagram: { username: ig?.username || h.instagram_handle, picture: ig?.picture || null, posts: ig?.posts || [] },
-    seminars: list(upcoming).map(mapSeminar),
     articles: list(articles).map(mapArticle),
     events: list(events).map(mapEventCard),
   }

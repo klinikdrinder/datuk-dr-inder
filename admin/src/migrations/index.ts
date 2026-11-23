@@ -6,6 +6,7 @@ import * as migration_20261114_055308_instagram_profile_picture from './20261114
 import * as migration_20261116_044831_expertise_card_photos from './20261116_044831_expertise_card_photos';
 import * as migration_20261116_080331_hero_credential_cards from './20261116_080331_hero_credential_cards';
 import * as migration_20261117_090000_journal_five_blogs from './20261117_090000_journal_five_blogs';
+import * as migration_20261123_090000_event_details from './20261123_090000_event_details';
 
 export const migrations = [
   {
@@ -47,5 +48,10 @@ export const migrations = [
     up: migration_20261117_090000_journal_five_blogs.up,
     down: migration_20261117_090000_journal_five_blogs.down,
     name: '20261117_090000_journal_five_blogs',
+  },
+  {
+    up: migration_20261123_090000_event_details.up,
+    down: migration_20261123_090000_event_details.down,
+    name: '20261123_090000_event_details',
   },
 ];

@@ -42,7 +42,7 @@ export const Enquiries: CollectionConfig = {
 export const SeminarRegistrations: CollectionConfig = {
   slug: 'seminar-registrations',
   labels: { singular: 'Seminar registration', plural: 'Seminar registrations' },
-  admin: { group: 'Seminars & events', useAsTitle: 'name', defaultColumns: ['createdAt', 'name', 'phone', 'seminar', 'seats', 'status'] },
+  admin: { group: 'Events', hidden: true, useAsTitle: 'name', defaultColumns: ['createdAt', 'name', 'phone', 'seminar', 'seats', 'status'] },
   access,
   defaultSort: '-createdAt',
   fields: [

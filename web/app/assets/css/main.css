@@ -43,7 +43,7 @@ section{position:relative}
 /* progress + nav */
 #progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--crimson);z-index:60;box-shadow:0 0 10px var(--crimson)}
 .nav{position:fixed;top:0;left:0;right:0;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
-.nav.solid{background:rgba(var(--bg),.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--hairline)}
+.nav.solid{background:rgba(var(--bg),.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--hairline)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;gap:20px}
 .mark{font:400 21px/1 var(--serif);text-decoration:none;white-space:nowrap}
 .mark i{color:var(--crimson);font-weight:500}

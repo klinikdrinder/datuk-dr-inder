@@ -37,6 +37,12 @@ function later(job: () => Promise<unknown>, payload: Payload) {
   }
 }
 
+/** Website address of an event page, e.g. /events/4-ishrs-world-congress-in-berlin (must match web/server/utils/mappers.ts). */
+export const eventPath = (e: { id: any; title?: string }) => {
+  const words = String(e.title || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80).replace(/-+$/, '')
+  return `/events/${e.id}${words ? `-${words}` : ''}`
+}
+
 /** Which website pages show this item (besides the homepage). */
 async function pagesFor(collection: string, doc: any, payload: Payload): Promise<string[]> {
   switch (collection) {
@@ -45,19 +51,10 @@ async function pagesFor(collection: string, doc: any, payload: Payload): Promise
     case 'categories':
       return ['/journal']
     case 'seminars':
-      return ['/events', ...(doc?.slug ? [`/seminars/${doc.slug}`] : [])]
-    case 'events': {
-      const out = ['/events']
-      const s = doc?.seminar
-      const id = s && typeof s === 'object' ? s.id : s
-      if (id) {
-        try {
-          const sem: any = await payload.findByID({ collection: 'seminars', id, depth: 0, overrideAccess: true })
-          if (sem?.slug) out.push(`/seminars/${sem.slug}`)
-        } catch {}
-      }
-      return out
-    }
+      return ['/events']
+    case 'events':
+      // the event's own page (same address rule as the website: /events/<id>-<title-words>)
+      return ['/events', ...(doc?.id ? [eventPath(doc)] : [])]
     case 'media': // a replaced photo can appear on any page
       return ['/events', '/journal']
     default:
@@ -75,6 +72,7 @@ export const revalidateAfterChange: CollectionAfterChangeHook = async ({ doc, pr
   later(async () => {
     const paths = await pagesFor(collection.slug, doc, payload)
     if (previousDoc?.slug && previousDoc.slug !== doc.slug) paths.push(...(await pagesFor(collection.slug, previousDoc, payload)))
+    if (collection.slug === 'events' && previousDoc?.id && previousDoc.title !== doc.title) paths.push(eventPath(previousDoc))
     await revalidateWebsite(paths, payload)
   }, payload)
   return doc

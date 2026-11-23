@@ -7,7 +7,7 @@ const handle = computed(() => props.home?.instagram_handle || 'datukdrinder')
   <section id="events" class="sec ev-sec">
     <div class="wrap">
       <div v-reveal class="sec-head rv">
-        <div><div class="eyebrow">Seminars &amp; events</div><h2 class="h2" style="margin-top:22px">Latest <span class="accent">events</span> attended</h2></div>
+        <div><div class="eyebrow">Events</div><h2 class="h2" style="margin-top:22px">Latest <span class="accent">events</span> attended</h2></div>
         <NuxtLink v-if="latest.length" class="btn btn-ghost" to="/events">See all events →</NuxtLink>
       </div>
       <div v-if="latest.length" v-reveal class="evc-rail rv" :class="`n${latest.length}`">
@@ -25,10 +25,9 @@ const handle = computed(() => props.home?.instagram_handle || 'datukdrinder')
           <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="14" rx="2.5" /><circle cx="12" cy="13" r="3.6" /><path d="M8.5 6l1.4-2.2h4.2L15.5 6" /></svg></span>
           <span class="tag">Coming soon</span>
           <h3>Event photos are on their way</h3>
-          <p>Highlights from Datuk Dr Inder’s seminars, international congresses and award nights will appear here shortly.</p>
+          <p>Highlights from the international congresses, meetings and award nights Datuk Dr Inder attends will appear here shortly.</p>
           <div class="ctas">
-            <NuxtLink class="btn btn-red" to="/events#seminars">Upcoming seminars</NuxtLink>
-            <a class="btn btn-ghost" :href="`https://www.instagram.com/${handle}/`" target="_blank" rel="noopener">Follow on Instagram ↗</a>
+            <a class="btn btn-red" :href="`https://www.instagram.com/${handle}/`" target="_blank" rel="noopener">Follow on Instagram ↗</a>
           </div>
         </div>
       </div>
